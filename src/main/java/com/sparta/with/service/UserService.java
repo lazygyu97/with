@@ -52,7 +52,13 @@ public class UserService {
         }
 
         // 사용자 등록
-        User user = new User(username, nickname, password, email, role);
+        User user = User.builder()
+            .username(username)
+            .password(password)
+            .nickname(nickname)
+            .email(email)
+            .role(role).build();
+
         userRepository.save(user);
     }
 }

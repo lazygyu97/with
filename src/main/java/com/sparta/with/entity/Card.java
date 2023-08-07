@@ -2,13 +2,15 @@ package com.sparta.with.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -21,48 +23,42 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Getter
-@Table(name = "users")
-public class User {
+@Table(name = "cards")
+public class Card extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
-    private String nickname;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column
-    private String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id", nullable = false)
+    private Area area;
 
     @Builder.Default
-    @OneToMany(mappedBy = "collaborator")
-    private List<BoardUser> boardUsers = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "collaborator")
+    @OneToMany(mappedBy = "card")
     private List<CardUser> cardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "author")
-    private List<Board> boards = new ArrayList<>();
+    @OneToMany(mappedBy = "card")
+    private List<CheckList> checkLists = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "card")
     private List<Comment> comments = new ArrayList<>();
 
-
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    private String content;
 
+    @Column
+    private LocalDateTime startDate;
+
+    @Column
+    private LocalDateTime dueDate;
+
+    @Column
+    private String color;
+
+    @Column
+    private String image;
 
 }
