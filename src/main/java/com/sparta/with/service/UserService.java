@@ -31,7 +31,7 @@ public class UserService {
         }
         // 회원 닉네임 중복 확인
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
-        if (checkUsername.isPresent()) {
+        if (checkNickname.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
