@@ -1,7 +1,11 @@
 package com.sparta.with.controller;
 
 import com.sparta.with.dto.ApiResponseDto;
+import com.sparta.with.dto.EmailRequestDto;
+import com.sparta.with.dto.EmailVerificationRequestDto;
 import com.sparta.with.dto.SignupRequestDto;
+import com.sparta.with.entity.EmailVerification;
+import com.sparta.with.service.EmailService;
 import com.sparta.with.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -11,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponseDto> signUp(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -45,6 +47,17 @@ public class UserController {
         }
 
         return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
+    }
+
+    @PostMapping("/login/mail")
+    public String mailSend(@RequestBody EmailRequestDto requestDto) throws Exception {
+        return emailService.sendSimpleMessage(requestDto.getEmail());
+    }
+
+    @GetMapping("/login/mail")
+    public ResponseEntity mailVerification(@RequestBody EmailVerificationRequestDto requestDto){
+        emailService.mailVerification(requestDto);
+        return ResponseEntity.ok().body("이메일이 인증되었습니다.");
     }
 
 }
