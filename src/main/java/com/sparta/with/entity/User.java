@@ -7,15 +7,20 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -38,16 +43,26 @@ public class User {
     @Column
     private String image;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "collaborator",orphanRemoval = true)
+    private List<BoardUser> boardUsers = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "collaborator",orphanRemoval = true)
+    private List<CardUser> cardUsers = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "author",orphanRemoval = true)
+    private List<Board> boards = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "author",orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String nickname, String password, String email,
-        UserRoleEnum role) {
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
+
 }
