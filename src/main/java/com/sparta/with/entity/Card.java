@@ -35,15 +35,15 @@ public class Card extends Timestamped {
     private Area area;
 
     @Builder.Default
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card",orphanRemoval = true)
     private List<CardUser> cardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card",orphanRemoval = true)
     private List<CheckList> checkLists = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card",orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = false)

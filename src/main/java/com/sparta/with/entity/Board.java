@@ -37,10 +37,10 @@ public class Board {
     private String name;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board",orphanRemoval = true)
     private List<BoardUser> boardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board",orphanRemoval = true)
     private List<Area> areas = new ArrayList<>();
 }

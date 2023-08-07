@@ -34,7 +34,7 @@ public class Area {
     private Board board;
 
     @Builder.Default
-    @OneToMany(mappedBy = "area")
+    @OneToMany(mappedBy = "area",orphanRemoval = true)
     private List<Card> cards=new ArrayList<>();
 
     @Column(nullable = false)
