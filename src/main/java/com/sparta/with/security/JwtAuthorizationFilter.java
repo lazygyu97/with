@@ -1,7 +1,8 @@
 package com.sparta.with.security;
 
-import com.sparta.with.entity.RefreshToken;
+import com.sparta.with.entity.redishash.RefreshToken;
 import com.sparta.with.jwt.JwtUtil;
+import com.sparta.with.repository.BlacklistRepository;
 import com.sparta.with.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -9,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,12 +29,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final BlacklistRepository blacklistRepository;
 
-
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, RefreshTokenRepository refreshTokenRepository) {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, RefreshTokenRepository refreshTokenRepository, BlacklistRepository blacklistRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.blacklistRepository = blacklistRepository;
     }
 
     @Override
@@ -41,13 +44,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String refreshToken = req.getHeader("RefreshToken");
 
         if (StringUtils.hasText(tokenValue)) {
+            checkBlacklist(tokenValue);
             boolean isValid = false;
             try {
-                isValid = jwtUtil.validateToken(tokenValue, refreshToken);
+                isValid = jwtUtil.validateToken(tokenValue);
             } catch (ExpiredJwtException e){
                 RefreshToken refToken = refreshTokenRepository.findById(refreshToken)
                         .orElseThrow(() -> new IllegalArgumentException("리프레시 실패"));
-
                 isValid = true;
                 Long id = refToken.getMemberId();
                 UserDetails userDetails = userDetailsService.loadUserById(id);
@@ -75,6 +78,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(req, res);
+    }
+
+    private void checkBlacklist(String tokenValue) {
+        if(blacklistRepository.existsById(tokenValue)) throw new IllegalArgumentException("로그아웃한 유저입니다.");
     }
 
     // 인증 처리

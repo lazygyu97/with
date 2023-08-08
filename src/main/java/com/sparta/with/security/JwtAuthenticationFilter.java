@@ -2,13 +2,12 @@ package com.sparta.with.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.with.dto.LoginRequestDto;
-import com.sparta.with.entity.RefreshToken;
+import com.sparta.with.entity.redishash.RefreshToken;
 import com.sparta.with.entity.User;
 import com.sparta.with.entity.UserRoleEnum;
 import com.sparta.with.jwt.JwtUtil;
 import com.sparta.with.repository.RefreshTokenRepository;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

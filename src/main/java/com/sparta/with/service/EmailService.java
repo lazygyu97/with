@@ -1,7 +1,7 @@
 package com.sparta.with.service;
 
 import com.sparta.with.dto.EmailVerificationRequestDto;
-import com.sparta.with.entity.EmailVerification;
+import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.repository.EmailVerificationRepository;
 import com.sparta.with.repository.UserRepository;
 import jakarta.mail.Message;

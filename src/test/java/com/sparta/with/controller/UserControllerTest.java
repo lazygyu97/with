@@ -5,15 +5,18 @@ import com.sparta.with.dto.EmailRequestDto;
 import com.sparta.with.dto.EmailVerificationRequestDto;
 import com.sparta.with.dto.LoginRequestDto;
 import com.sparta.with.dto.SignupRequestDto;
-import com.sparta.with.entity.EmailVerification;
+import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.repository.EmailVerificationRepository;
+import com.sparta.with.repository.UserRepository;
 import com.sparta.with.service.EmailService;
+import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +38,8 @@ class UserControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     EmailVerificationRepository emailVerificationRepository;
     @Autowired
