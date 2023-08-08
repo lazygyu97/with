@@ -33,4 +33,16 @@ public class BoardUser {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
+    public BoardUser(User collaborator, Board board) {
+        this.collaborator = collaborator;
+        this.board = board;
+    }
+
+    public void updateCollaborator(User newCollaborator) {
+        if (this.collaborator != null) {
+            this.collaborator.getBoardUsers().remove(this);
+        }
+        this.collaborator = newCollaborator;
+        newCollaborator.getBoardUsers().add(this);
+    }
 }

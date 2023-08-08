@@ -1,5 +1,6 @@
 package com.sparta.with.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.entity.User;
 import com.sparta.with.entity.UserRoleEnum;
@@ -60,5 +61,10 @@ public class UserService {
             .role(role).build();
 
         userRepository.save(user);
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
 }

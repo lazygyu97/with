@@ -44,19 +44,19 @@ public class User {
     private String image;
 
     @Builder.Default
-    @OneToMany(mappedBy = "collaborator",orphanRemoval = true)
+    @OneToMany(mappedBy = "collaborator", orphanRemoval = true)
     private List<BoardUser> boardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "collaborator",orphanRemoval = true)
+    @OneToMany(mappedBy = "collaborator", orphanRemoval = true)
     private List<CardUser> cardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "author",orphanRemoval = true)
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "author",orphanRemoval = true)
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
 

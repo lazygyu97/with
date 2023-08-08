@@ -1,5 +1,6 @@
 package com.sparta.with.entity;
 
+import com.sparta.with.dto.BoardRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,14 +17,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/* Board (보드, 칸반 보드) : 렌더링되는 협업 화면 중 가장 큰 단위 */
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Getter
+@Setter
 @Table(name = "boards")
-public class Board {
+public class Board extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +41,34 @@ public class Board {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String color;
+
+    @Column
+    private String info;
+
     @Builder.Default
-    @OneToMany(mappedBy = "board",orphanRemoval = true)
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<BoardUser> boardUsers = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board",orphanRemoval = true)
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Area> areas = new ArrayList<>();
+
+    public Board(BoardRequestDto boardRequestDto, User author) {
+        this.name = boardRequestDto.getName();
+        this.author = author;
+    }
+
+    public void updateName(BoardRequestDto boardRequestDto) {
+        this.name = boardRequestDto.getName();
+    }
+
+    public void updateColor(BoardRequestDto boardRequestDto) {
+        this.color = boardRequestDto.getColor();
+    }
+
+    public void updateInfo(BoardRequestDto boardRequestDto) {
+        this.info = boardRequestDto.getInfo();
+    }
 }

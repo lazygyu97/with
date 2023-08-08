@@ -3,6 +3,8 @@ package com.sparta.with.controller;
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@Tag(name="User Example API", description = "사용자와 관련된 API 예제입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -24,6 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "sign up", description = "회원가입")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponseDto> signUp(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
 

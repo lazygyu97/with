@@ -4,6 +4,7 @@ import com.sparta.with.jwt.JwtUtil;
 import com.sparta.with.security.JwtAuthenticationFilter;
 import com.sparta.with.security.JwtAuthorizationFilter;
 import com.sparta.with.security.UserDetailsServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -63,9 +64,10 @@ public class WebSecurityConfig {
             authorizeHttpRequests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                 .requestMatchers("/api/users/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+                .requestMatchers("/api/boards/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll() // swagger 관련 경로 모두 접근 허가
                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
-
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
