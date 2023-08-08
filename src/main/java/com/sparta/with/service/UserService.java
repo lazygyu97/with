@@ -1,24 +1,40 @@
 package com.sparta.with.service;
 
 import com.sparta.with.dto.SignupRequestDto;
-import com.sparta.with.entity.EmailVerification;
+import com.sparta.with.entity.redishash.Blacklist;
+import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.entity.User;
 import com.sparta.with.entity.UserRoleEnum;
+import com.sparta.with.entity.redishash.RefreshToken;
+import com.sparta.with.jwt.JwtUtil;
+import com.sparta.with.repository.BlacklistRepository;
 import com.sparta.with.repository.EmailVerificationRepository;
+import com.sparta.with.repository.RefreshTokenRepository;
 import com.sparta.with.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Key;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationRepository emailVerificationRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final BlacklistRepository blacklistRepository;
+    private final JwtUtil jwtUtil;
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -68,5 +84,28 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public void logout(User user, HttpServletRequest request) {
+        String refreshTokenVal = request.getHeader("RefreshToken").substring(7);
+        String accessTokenVal = jwtUtil.getJwtFromHeader(request);
+
+        try {
+            Key key = jwtUtil.getKey();
+            Date expiration = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(accessTokenVal)
+                    .getBody()
+                    .getExpiration();
+            long expireTime = expiration.getTime() - System.currentTimeMillis();
+            blacklistRepository.save(new Blacklist(accessTokenVal, expireTime/1000));
+            RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenVal)
+                    .orElseThrow(()->new IllegalArgumentException("리프레시 토큰이 없습니다."));
+            refreshTokenRepository.delete(refreshToken);
+            System.out.println(expiration.toString());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

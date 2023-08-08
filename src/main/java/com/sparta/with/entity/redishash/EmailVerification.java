@@ -1,4 +1,4 @@
-package com.sparta.with.entity;
+package com.sparta.with.entity.redishash;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

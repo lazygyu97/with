@@ -4,15 +4,17 @@ import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.EmailRequestDto;
 import com.sparta.with.dto.EmailVerificationRequestDto;
 import com.sparta.with.dto.SignupRequestDto;
-import com.sparta.with.entity.EmailVerification;
+import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.EmailService;
 import com.sparta.with.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +57,9 @@ public class UserController {
         emailService.mailVerification(requestDto);
         return ResponseEntity.ok().body("이메일이 인증되었습니다.");
     }
-
+    @GetMapping("/logout")
+    public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
+        userService.logout(userDetails.getUser(), request);
+        return ResponseEntity.ok().body("로그아웃 완료");
+    }
 }

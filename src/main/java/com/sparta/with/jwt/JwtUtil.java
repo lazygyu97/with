@@ -7,6 +7,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Slf4j(topic = "JwtUtil")
 @Component
 @RequiredArgsConstructor
+@Getter
 public class JwtUtil {
     private final RefreshTokenRepository refreshTokenRepository;
     // Header KEY 값
@@ -67,7 +69,7 @@ public class JwtUtil {
     }
 
     // 토큰 검증
-    public boolean validateToken(String accessToken, String refreshToken) throws ExpiredJwtException{
+    public boolean validateToken(String accessToken) throws ExpiredJwtException{
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
             return true;

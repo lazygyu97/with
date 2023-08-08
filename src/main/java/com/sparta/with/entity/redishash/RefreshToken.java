@@ -1,4 +1,4 @@
-package com.sparta.with.entity;
+package com.sparta.with.entity.redishash;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
