@@ -40,11 +40,7 @@ public class UserController {
         }
 
         // Validation 예외 처리후 서비스로 전달.
-        try {
-            userService.signUp(requestDto);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ApiResponseDto("중복된 username 입니다.", HttpStatus.BAD_REQUEST.value()));
-        }
+        userService.signUp(requestDto);
 
         return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
