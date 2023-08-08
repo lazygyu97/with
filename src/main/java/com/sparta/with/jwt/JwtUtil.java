@@ -36,7 +36,6 @@ public class JwtUtil {
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    private final UserDetailsServiceImpl userDetailsService;
 
     @PostConstruct
     public void init() {

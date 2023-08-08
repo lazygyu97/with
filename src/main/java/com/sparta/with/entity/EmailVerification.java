@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash(value = "email_verification", timeToLive = 60*24*7)
+@RedisHash(value = "email_verification", timeToLive = 60*3)
 @Getter
 public class EmailVerification {
     @Id
