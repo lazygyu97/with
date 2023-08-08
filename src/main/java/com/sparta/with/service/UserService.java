@@ -1,5 +1,6 @@
 package com.sparta.with.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.entity.redishash.Blacklist;
 import com.sparta.with.entity.redishash.EmailVerification;
@@ -85,7 +86,7 @@ public class UserService {
 
         userRepository.save(user);
     }
-
+    
     public void logout(User user, HttpServletRequest request) {
         String refreshTokenVal = request.getHeader("RefreshToken").substring(7);
         String accessTokenVal = jwtUtil.getJwtFromHeader(request);
@@ -108,4 +109,10 @@ public class UserService {
             System.out.println(e.getMessage());
         }
     }
+    
+    //BoardService 협업자 등록에서 현재 사용중 - 삭제될 예정 (boardUser id로 변경 예정)
+    public User findUserByUsername(String username) {
+          return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+    }
+    
 }

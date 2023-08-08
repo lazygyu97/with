@@ -11,8 +11,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import lombok.Builder;
 import java.util.UUID;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,7 +63,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));
         String token = jwtUtil.createToken(username, role);
 
-//        response.addCookie(new Cookie("RefreshToken", refreshTokenVal));
         response.addHeader("RefreshToken", refreshTokenVal);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
@@ -72,7 +71,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
         throws IOException {
         log.info("로그인 실패");
-        response.setStatus(401);
+
+        // 응답에 성공 메시지를 추가하여 클라이언트에 전달
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("메세지 : 로그인 실패\nstatus : 401");
+        response.getWriter().flush();
+
     }
 
 }

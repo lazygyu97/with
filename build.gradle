@@ -58,6 +58,9 @@ dependencies {
     //SMTP
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+    
     // redis transaction
     implementation('org.springframework:spring-tx:6.0.6')
 }
