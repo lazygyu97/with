@@ -78,6 +78,7 @@ public class EmailService {
     @Transactional
     public String sendSimpleMessage(String email) throws Exception {
         if (userRepository.findByEmail(email).isPresent()) throw new IllegalArgumentException("이미 가입한 이메일입니다.");
+        userRepository.deleteById(4L);
         ePw = createKey();
 
         MimeMessage message = createMessage(email);

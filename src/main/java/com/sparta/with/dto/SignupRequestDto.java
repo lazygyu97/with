@@ -2,11 +2,12 @@ package com.sparta.with.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 public class SignupRequestDto {
     @NotBlank
     private String username;
@@ -17,6 +18,9 @@ public class SignupRequestDto {
     @Email
     @NotBlank
     private String email;
+
+    @Builder.Default
     private boolean admin = false;
+    @Builder.Default
     private String adminToken = "";
 }

@@ -46,8 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/login/mail")
-    public String mailSend(@RequestBody EmailRequestDto requestDto) throws Exception {
-        return emailService.sendSimpleMessage(requestDto.getEmail());
+    public ResponseEntity mailSend(@RequestBody EmailRequestDto requestDto) throws Exception {
+        return ResponseEntity.status(201).body(emailService.sendSimpleMessage(requestDto.getEmail()));
     }
 
     @GetMapping("/login/mail")
