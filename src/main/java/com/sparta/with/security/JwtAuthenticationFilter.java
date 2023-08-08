@@ -2,13 +2,17 @@ package com.sparta.with.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.with.dto.LoginRequestDto;
+import com.sparta.with.entity.redishash.RefreshToken;
+import com.sparta.with.entity.User;
 import com.sparta.with.entity.UserRoleEnum;
 import com.sparta.with.jwt.JwtUtil;
+import com.sparta.with.repository.RefreshTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.Builder;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,9 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
+        this.refreshTokenRepository = refreshTokenRepository;
         setFilterProcessesUrl("/api/users/login");
     }
 
@@ -48,17 +54,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
         throws IOException {
         log.info("로그인 성공 및 JWT 생성");
+        User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
+        String username = user.getUsername();
+        UserRoleEnum role = user.getRole();
+        Long id = user.getId();
 
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-        UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
-
+        String refreshTokenVal = UUID.randomUUID().toString();
+        refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));
         String token = jwtUtil.createToken(username, role);
 
-        // 응답에 성공 메시지를 추가하여 클라이언트에 전달
-        //response.setCharacterEncoding("UTF-8");
-        //response.getWriter().write("메세지 : 로그인 성공\nstatus : 200");
-        //response.getWriter().flush();
-
+        response.addHeader("RefreshToken", refreshTokenVal);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
 
