@@ -32,4 +32,9 @@ public class CardUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id", nullable = false)
     private Card card;
+
+    public CardUser(User collaborator, Card card) {
+        this.collaborator = collaborator;
+        this.card = card;
+    }
 }

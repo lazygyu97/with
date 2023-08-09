@@ -38,5 +38,18 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    public Comment(String content) {
+       this.content = content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public void setCard(Card card) {
+        this.card = card;
+    }
+    public void setAuthor(User author) {
+        this.author = author;
+    }
 
 }
