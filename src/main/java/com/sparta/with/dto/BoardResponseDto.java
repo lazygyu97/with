@@ -4,11 +4,16 @@ import com.sparta.with.entity.Area;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BoardResponseDto {
     private Long id;
     private String name;
@@ -18,16 +23,6 @@ public class BoardResponseDto {
     private List<BoardUser> boardUsers;
     private List<Area> areas;
 
-    @Builder
-    public BoardResponseDto(Board board) {
-        this.id = board.getId();
-        this.name = board.getName();
-        this.color = board.getColor();
-        this.info = board.getInfo();
-        this.author = board.getAuthor().getUsername();
-        this.boardUsers = board.getBoardUsers();
-        this.areas = board.getAreas();
-    }
 
     public static BoardResponseDto of(Board board) {
         return BoardResponseDto.builder()

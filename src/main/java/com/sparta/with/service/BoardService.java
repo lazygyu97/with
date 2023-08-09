@@ -31,14 +31,14 @@ public class BoardService {
         Board board = boardRequestDto.toEntity(author);
 
         boardRepository.save(board);
-        return new BoardResponseDto(board);
+        return BoardResponseDto.of(board);
     }
 
     // 소유한 보드 전체 조회
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getBoards() {
         return boardRepository.findAllByOrderByCreatedAtDesc().stream()
-            .map(BoardResponseDto::new)
+            .map(BoardResponseDto::of)
             .collect(Collectors.toList());
     }
 
@@ -46,7 +46,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardResponseDto getBoardById(Long id) {
         Board board = findBoard(id);
-        return new BoardResponseDto(board);
+        return BoardResponseDto.of(board);
     }
 
     // 초대 받은 보드 전체 조회
@@ -58,7 +58,7 @@ public class BoardService {
             .map(BoardUser::getBoard)
             .collect(Collectors.toList());
 
-        return collaboratedBoards.stream().map(BoardResponseDto::new).collect(Collectors.toList());
+        return collaboratedBoards.stream().map(BoardResponseDto::of).collect(Collectors.toList());
     }
 
 
@@ -66,7 +66,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardResponseDto getCollaboratedBoardById(Long id) {
         Board board = findBoard(id);
-        return new BoardResponseDto(board);
+        return BoardResponseDto.of(board);
     }
 
     // 보드 이름 수정
