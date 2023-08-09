@@ -1,5 +1,6 @@
 package com.sparta.with.entity;
 
+import com.sparta.with.dto.AreaRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,5 +43,14 @@ public class Area {
 
     @Column(nullable = false)
     private int position;
+
+    public Area(AreaRequestDto requestDto) {
+        this.name = requestDto.getName();
+        this.position = requestDto.getPosition();
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
 }
