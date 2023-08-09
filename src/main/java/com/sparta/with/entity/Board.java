@@ -20,6 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /* Board (보드, 칸반 보드) : 렌더링되는 협업 화면 중 가장 큰 단위 */
+
+//User : 회원1, 회원2, 회원3
+//User -> BoardUser : 회원 1을 Collaborator로 등록
+//User -> BoardUser -> Board : Collaborator 여러명 묶어서 저장
+// (private List<BoardUser> boardUsers = new ArrayList<>();)
+
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -11,7 +11,6 @@ import com.sparta.with.entity.User;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.BoardService;
 import com.sparta.with.service.UserService;
-import com.sun.jdi.request.DuplicateRequestException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.concurrent.RejectedExecutionException;
@@ -79,26 +78,6 @@ public class BoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 전체 조회 (협업 초대 받은 보드)
-    @Operation(summary = "get collaborator's boards", description = "협업하고 있는 칸반 보드 전체 조회")
-    @GetMapping("/boards/collaborators")
-    public ResponseEntity<BoardsResponseDto> getCollaboratedBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 수정: 현재 로그인한 사용자의 정보를 @AuthenticationPrincipal로 받아옴
-        BoardsResponseDto result = new BoardsResponseDto(boardService.getCollaboratedBoards(userDetails));
-
-        return ResponseEntity.ok().body(result);
-    }
-
-    // 단건 조회 (협업 초대 받은 보드)
-    @Operation(summary = "get collaborator's board by id", description = "협업하고 있는 칸반 보드 단건 조회")
-    @GetMapping("/boards/collaborators/{id}")
-    public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(@PathVariable Long id) {
-        BoardResponseDto result = boardService.getCollaboratedBoardById(id);
-
-        return ResponseEntity.ok().body(result);
-    }
-
-
     // 보드 이름 수정
     @Operation(summary = "update Board's Name", description = "칸반 보드 이름 수정")
     @PutMapping("/boards/{id}/names")
@@ -141,6 +120,25 @@ public class BoardController {
         }
 
         return ResponseEntity.ok().body(new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value()));
+    }
+
+    // 전체 조회 (협업 초대 받은 보드)
+    @Operation(summary = "get collaborator's boards", description = "협업하고 있는 칸반 보드 전체 조회")
+    @GetMapping("/boards/collaborators")
+    public ResponseEntity<BoardsResponseDto> getCollaboratedBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // 수정: 현재 로그인한 사용자의 정보를 @AuthenticationPrincipal로 받아옴
+        BoardsResponseDto result = new BoardsResponseDto(boardService.getCollaboratedBoards(userDetails));
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    // 단건 조회 (협업 초대 받은 보드)
+    @Operation(summary = "get collaborator's board by id", description = "협업하고 있는 칸반 보드 단건 조회")
+    @GetMapping("/boards/collaborators/{id}")
+    public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(@PathVariable Long id) {
+        BoardResponseDto result = boardService.getCollaboratedBoardById(id);
+
+        return ResponseEntity.ok().body(result);
     }
 
     // 내 칸반 보드에 협업자 초대

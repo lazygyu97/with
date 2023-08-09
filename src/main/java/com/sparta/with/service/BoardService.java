@@ -3,7 +3,6 @@ package com.sparta.with.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
-import com.sparta.with.dto.BoardsResponseDto;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,26 +46,6 @@ public class BoardService {
         return BoardResponseDto.of(board);
     }
 
-    // 초대 받은 보드 전체 조회
-    @Transactional(readOnly = true)
-    public List<BoardResponseDto> getCollaboratedBoards(UserDetailsImpl userDetails) {
-        List<BoardUser> boardUsers = boardUserRepository.findByCollaborator(userDetails.getUser());
-
-        List<Board> collaboratedBoards = boardUsers.stream()
-            .map(BoardUser::getBoard)
-            .collect(Collectors.toList());
-
-        return collaboratedBoards.stream().map(BoardResponseDto::of).collect(Collectors.toList());
-    }
-
-
-    // 초대 받은 보드 단건 조회
-    @Transactional(readOnly = true)
-    public BoardResponseDto getCollaboratedBoardById(Long id) {
-        Board board = findBoard(id);
-        return BoardResponseDto.of(board);
-    }
-
     // 보드 이름 수정
     public Board updateBoardName(Board board, BoardRequestDto boardRequestDto) {
         board.updateName(boardRequestDto);
@@ -96,6 +73,24 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    // 초대 받은 보드 전체 조회
+    @Transactional(readOnly = true)
+    public List<BoardResponseDto> getCollaboratedBoards(UserDetailsImpl userDetails) {
+        List<BoardUser> boardUsers = boardUserRepository.findByCollaborator(userDetails.getUser());
+
+        List<Board> collaboratedBoards = boardUsers.stream()
+            .map(BoardUser::getBoard)
+            .collect(Collectors.toList());
+
+        return collaboratedBoards.stream().map(BoardResponseDto::of).collect(Collectors.toList());
+    }
+
+    // 초대 받은 보드 단건 조회
+    @Transactional(readOnly = true)
+    public BoardResponseDto getCollaboratedBoardById(Long id) {
+        Board board = findBoard(id);
+        return BoardResponseDto.of(board);
+    }
 
     // 내 칸반 보드에 협업자 초대
     @Transactional

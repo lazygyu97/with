@@ -16,6 +16,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//User : 회원1, 회원2, 회원3
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
