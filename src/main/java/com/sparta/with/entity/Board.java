@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /* Board (보드, 칸반 보드) : 렌더링되는 협업 화면 중 가장 큰 단위 */
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,6 +56,8 @@ public class Board extends Timestamped {
 
     public Board(BoardRequestDto boardRequestDto, User author) {
         this.name = boardRequestDto.getName();
+        this.color = boardRequestDto.getColor();
+        this.info = boardRequestDto.getInfo();
         this.author = author;
     }
 
