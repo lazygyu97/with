@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class BoardResponseDto {
     private Long id;
     private String name;
@@ -26,5 +27,15 @@ public class BoardResponseDto {
         this.author = board.getAuthor().getUsername();
         this.boardUsers = board.getBoardUsers();
         this.areas = board.getAreas();
+    }
+
+    public static BoardResponseDto of(Board board) {
+        return BoardResponseDto.builder()
+                .id(board.getId())
+                .name(board.getName())
+                .author(board.getAuthor().getUsername())
+                .color(board.getColor())
+                .info(board.getInfo())
+                .build();
     }
 }

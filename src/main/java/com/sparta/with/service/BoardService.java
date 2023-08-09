@@ -28,7 +28,7 @@ public class BoardService {
     // 보드 생성
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, User author) {
-        Board board = new Board(boardRequestDto, author);
+        Board board = boardRequestDto.toEntity(author);
 
         boardRepository.save(board);
         return new BoardResponseDto(board);
