@@ -3,7 +3,7 @@ package com.sparta.with.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
-import com.sparta.with.dto.BoardsResponseDto;
+import com.sparta.with.dto.BoardUsersResponseDto;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,6 +116,13 @@ public class BoardService {
         boardUser.updateCollaborator(newCollaborator);
     }
 
+    @Transactional(readOnly = true)
+    // 내 칸반 보드의 협업자 명단 조회
+    public BoardUsersResponseDto getBoardUsers(Long id) {
+        List<BoardUser> boardList = boardUserRepository.findByBoard_Id(id);
+
+        return BoardUsersResponseDto.of(boardList);
+    }
 
     public Board findBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 칸반 보드입니다."));
