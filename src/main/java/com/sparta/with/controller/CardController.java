@@ -4,7 +4,6 @@ import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.CardRequestDto;
 import com.sparta.with.dto.CardListResponseDto;
 import com.sparta.with.dto.CardResponseDto;
-import com.sparta.with.dto.CollaboratorRequestDto;
 import com.sparta.with.entity.User;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.CardService;

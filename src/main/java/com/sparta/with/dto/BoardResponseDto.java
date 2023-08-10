@@ -14,15 +14,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardResponseDto {
+public class BoardResponseDto extends ApiResponseDto {
     private Long id;
     private String name;
     private String author;
     private String color;
     private String info;
+    private String message;
+    private Integer statusCode;
     private List<BoardUser> boardUsers;
     private List<AreaResponseDto> areas;
-
 
     public static BoardResponseDto of(Board board) {
         return BoardResponseDto.builder()
