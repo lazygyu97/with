@@ -51,9 +51,9 @@ public class BoardController {
 
             BoardResponseDto result = boardService.createBoard(boardRequestDto, userDetails.getUser());
 
-            String successMessage = "\nCreate Kanban board Success.";//삭제 가능
-            System.out.println(successMessage);//삭제 가능
-            return ResponseEntity.status(HttpStatus.CREATED).header("Message", successMessage).body(result);
+//            String successMessage = "\nCreate Kanban board Success.";//삭제 가능
+//            System.out.println(successMessage);//삭제 가능
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
             String errorMessage = "\nCreate Kanban board Failed. Reason: " + e.getMessage();
             System.err.println(errorMessage);

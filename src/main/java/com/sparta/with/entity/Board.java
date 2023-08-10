@@ -47,6 +47,7 @@ public class Board extends Timestamped {
     @Column
     private String info;
 
+
     @Builder.Default
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<BoardUser> boardUsers = new ArrayList<>();
