@@ -119,4 +119,5 @@ public class UserService {
     public UserResponseDto getUserInfo(User user) {
         return UserResponseDto.of(user);
     }
+    
 }

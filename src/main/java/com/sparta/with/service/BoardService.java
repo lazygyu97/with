@@ -43,7 +43,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardsResponseDto getAllBoards(User author) {
         try {
-            List<Board> boards = boardRepository.findAllByOrderByCreatedAtDesc(author);
+            List<Board> boards = boardRepository.findAllByAuthorOrderByCreatedAtDesc(author);
             return BoardsResponseDto.of(boards);
         } catch (Exception e) {
             throw new RuntimeException("모든 칸반 보드 조회를 실패했습니다. 이유: " + e.getMessage(), e);
