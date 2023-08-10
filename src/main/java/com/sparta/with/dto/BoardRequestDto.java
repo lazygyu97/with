@@ -13,12 +13,11 @@ public class BoardRequestDto {
     private String info;
 
     public Board toEntity(User author) {
-        Board board = Board.builder()
+        return Board.builder()
                 .name(this.name)
                 .color(this.color)
                 .info(this.info)
                 .author(author)
                 .build();
-        return board;
     }
 }

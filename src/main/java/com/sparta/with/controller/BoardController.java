@@ -121,7 +121,7 @@ public class BoardController {
 
     // 보드 설명 수정
     @Operation(summary = "update Board's Info", description = "칸반 보드 설명 수정")
-    @PutMapping("/boards/{id}/intros")
+    @PutMapping("/boards/{id}/infos")
     public ResponseEntity<ApiResponseDto> updateBoardInfo(@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto) {
         Board board = boardService.findBoard(id);
         boardService.updateBoardInfo(board, boardRequestDto);

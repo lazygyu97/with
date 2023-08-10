@@ -61,11 +61,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = user.getUsername();
         UserRoleEnum role = user.getRole();
         Long id = user.getId();
-
-        System.out.println(id);
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByMemberId(id);
-        refreshToken.ifPresent(token -> System.out.println(token.getRefreshToken()));
-        refreshToken.ifPresent(token -> refreshTokenRepository.deleteByMemberId(id));
+//
+//        System.out.println(id);
+//        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByMemberId(id);
+//        refreshToken.ifPresent(token -> System.out.println(token.getRefreshToken()));
+//        refreshToken.ifPresent(token -> refreshTokenRepository.deleteByMemberId(id));
 
         String refreshTokenVal = UUID.randomUUID().toString();
         refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));
