@@ -25,35 +25,32 @@ public class CommentService {
         () -> new IllegalArgumentException("해당 카드가 존재하지 않습니다.")
     );
 
-    Comment comment = new Comment(requestDto.getContent());
-    comment.setAuthor(user);
-    comment.setCard(card);
-
+    Comment comment = requestDto.toEntity(card, user);
     var savedComment = commentRepository.save(comment);
 
-    return new CommentResponseDto(savedComment);
+    return CommentResponseDto.of(savedComment);
   }
 
   // 댓글 수정
   @Transactional
-  public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
+  public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto) {
     Comment comment = findComment(id);
 
-    comment.setContent(requestDto.getContent());
+    comment.updateContent(requestDto.getContent());
 
-    return new CommentResponseDto(comment);
+    return CommentResponseDto.of(comment);
   }
 
   @Transactional
   // 댓글 삭제
-  public void deleteComment(Long id, User user) {
+  public void deleteComment(Long id) {
     Comment comment = findComment(id);
 
     commentRepository.delete(comment);
   }
 
   // 해당 카드가 DB에 존재하는지 확인
-  public Comment findComment(Long id) {
+  private Comment findComment(Long id) {
 
     return commentRepository.findById(id).orElseThrow(() ->
         new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
