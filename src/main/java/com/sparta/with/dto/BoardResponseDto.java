@@ -14,15 +14,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardResponseDto {
+public class BoardResponseDto extends ApiResponseDto {
     private Long id;
     private String name;
     private String author;
     private String color;
     private String info;
+    private String message;
+    private Integer statusCode;
     private List<BoardUser> boardUsers;
-    private List<Area> areas;
-
+    private List<AreaResponseDto> areas;
 
     public static BoardResponseDto of(Board board) {
         return BoardResponseDto.builder()
@@ -31,6 +32,7 @@ public class BoardResponseDto {
                 .author(board.getAuthor().getUsername())
                 .color(board.getColor())
                 .info(board.getInfo())
+                .areas(board.getAreas().stream().map(AreaResponseDto::of).toList())
                 .build();
     }
 }

@@ -49,6 +49,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try {
                 isValid = jwtUtil.validateToken(tokenValue);
             } catch (ExpiredJwtException e){
+                System.out.println(tokenValue);
                 RefreshToken refToken = refreshTokenRepository.findById(refreshToken)
                         .orElseThrow(() -> new IllegalArgumentException("리프레시 실패"));
                 isValid = true;
