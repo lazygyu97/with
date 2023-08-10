@@ -1,6 +1,5 @@
 package com.sparta.with.entity;
 
-import com.sparta.with.dto.CardRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -69,33 +68,22 @@ public class Card extends Timestamped {
   @Column
   private String image;
 
-  @Builder
-  public Card(CardRequestDto requestDto) {
-    this.title = requestDto.getTitle();
-  }
-
-  public void setArea(Area area) {
-    this.area = area;
-  }
-  public void setUser(User author) {
+  public void updateUser(User author) {
     this.author = author;
   }
-  public void setTitle(String title) {
-    this.title = title;
-  }
-  public void setContent(String content) {
+  public void updateContent(String content) {
     this.content = content;
   }
-  public void setStartDate(LocalDateTime startDate) {
+  public void updateStartDate(LocalDateTime startDate) {
     this.startDate = startDate;
   }
-  public void setDueDate(LocalDateTime dueDate) {
+  public void updateDueDate(LocalDateTime dueDate) {
     this.dueDate = dueDate;
   }
-  public void setColor(String color) {
+  public void updateColor(String color) {
     this.color = color;
   }
-  public void setImage(String image) {
+  public void updateImage(String image) {
     this.image = image;
   }
 
