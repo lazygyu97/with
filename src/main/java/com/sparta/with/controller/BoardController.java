@@ -50,8 +50,7 @@ public class BoardController {
     // 보드 전체 조회 (본인이 생성한 보드)
     @Operation(summary = "get all boards", description = "모든 칸반 보드 조회")
     @GetMapping("/boards")
-    public ResponseEntity<BoardsResponseDto> getAllBoards(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<BoardsResponseDto> getAllBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         BoardsResponseDto boards = boardService.getAllBoards(userDetails.getUser());
         return ResponseEntity.ok().body(boards);
     }
@@ -59,8 +58,7 @@ public class BoardController {
     // 보드 단건 조회 (본인이 생성한 보드)
     @Operation(summary = "get owner's board by id", description = "소유한 칸반 보드 단건 조회")
     @GetMapping("/boards/{id}")
-    public ResponseEntity<BoardResponseDto> getBoardById(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity<BoardResponseDto> getBoardById(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         BoardResponseDto result = boardService.getBoardById(userDetails.getUser(), id);
         return ResponseEntity.ok().body(result);
     }
@@ -68,8 +66,7 @@ public class BoardController {
     // 보드 삭제 (본인이 생성한 보드)
     @Operation(summary = "delete Board", description = "칸반 보드 삭제")
     @DeleteMapping("/boards/{id}")
-    public ResponseEntity<ApiResponseDto> deleteBoard(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity<ApiResponseDto> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         Board board = boardService.findBoard(userDetails.getUser(), id);
         boardService.deleteBoard(board, userDetails.getUser());
         return ResponseEntity.ok().body(new ApiResponseDto("칸반 보드 삭제 성공", HttpStatus.OK.value()));
@@ -79,8 +76,10 @@ public class BoardController {
     @Operation(summary = "update Board's Name", description = "칸반 보드 이름 수정")
     @PutMapping("/boards/{id}/names")
     public ResponseEntity<ApiResponseDto> updateBoardName(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id,
-        @RequestBody BoardRequestDto boardRequestDto) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long id,
+        @RequestBody BoardRequestDto boardRequestDto
+    ) {
         Board board = boardService.findBoard(userDetails.getUser(), id);
         boardService.updateBoardName(board, boardRequestDto);
         return ResponseEntity.ok()
@@ -91,8 +90,10 @@ public class BoardController {
     @Operation(summary = "update Board's Color", description = "칸반 보드 배경색상 수정")
     @PutMapping("/boards/{id}/colors")
     public ResponseEntity<ApiResponseDto> updateBoardColor(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id,
-        @RequestBody BoardRequestDto boardRequestDto) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long id,
+        @RequestBody BoardRequestDto boardRequestDto
+    ) {
         Board board = boardService.findBoard(userDetails.getUser(), id);
         boardService.updateBoardColor(board, boardRequestDto);
         return ResponseEntity.ok()
@@ -114,8 +115,7 @@ public class BoardController {
     // 보드 전체 조회 (협업 초대 받은 보드)
     @Operation(summary = "get collaborator's boards", description = "협업하고 있는 칸반 보드 전체 조회")
     @GetMapping("/boards/collaborators")
-    public ResponseEntity<BoardsResponseDto> getCollaboratedBoards(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<BoardsResponseDto> getCollaboratedBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         BoardsResponseDto result = boardService.getCollaboratedBoards(userDetails);
         return ResponseEntity.ok().body(result);
     }
@@ -123,8 +123,7 @@ public class BoardController {
     // 보드 단건 조회 (협업 초대 받은 보드)
     @Operation(summary = "get collaborator's board by id", description = "협업하고 있는 칸반 보드 단건 조회")
     @GetMapping("/boards/collaborators/{id}")
-    public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         BoardResponseDto result = boardService.getCollaboratedBoardById(userDetails.getUser(), id);
         return ResponseEntity.ok().body(result);
     }
@@ -133,8 +132,7 @@ public class BoardController {
     // 보드 협업자 등록
     // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
     @PostMapping("/boards/{boardId}/collaborators")
-    public ResponseEntity<ApiResponseDto> addCollaborator(
-        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId) {
+    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId) {
         Board board = boardService.findBoard(userDetails.getUser(), boardId);
         User collaborator = userService.findUserByUserid(userDetails.getUser().getId());
 
