@@ -66,4 +66,9 @@ public class UserController {
         userService.logout(userDetails.getUser(), request);
         return ResponseEntity.ok().body("로그아웃 완료");
     }
+
+    @GetMapping
+    public ResponseEntity getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ResponseEntity.ok().body(userService.getUserInfo(userDetails.getUser()));
+    }
 }

@@ -2,6 +2,7 @@ package com.sparta.with.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.SignupRequestDto;
+import com.sparta.with.dto.UserResponseDto;
 import com.sparta.with.entity.redishash.Blacklist;
 import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.entity.User;
@@ -109,12 +110,16 @@ public class UserService {
     }
     
     //BoardService 협업자 등록에서 현재 사용중 - 삭제될 예정 (boardUser id로 변경 예정)
-    public User findUserByUsername(String username) {
-          return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+    public User findUserByUserid(Long id) {
+          return userRepository.findById(id).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
+
+    public UserResponseDto getUserInfo(User user) {
+        return UserResponseDto.of(user);
+    }
+
     //CardService 협업자 등록에서 현재 사용중
     public User findUserByUserId(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
-    
 }
