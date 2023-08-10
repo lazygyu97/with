@@ -5,11 +5,14 @@ import com.sparta.with.entity.CardUser;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CardResponseDto extends ApiResponseDto{
   private Long id;
   private String title;
@@ -34,4 +37,17 @@ public class CardResponseDto extends ApiResponseDto{
         .map(CommentResponseDto::new)
         .collect(Collectors.toList());
   }
+
+    public static CardResponseDto of(Card card) {
+      return CardResponseDto.builder()
+              .id(card.getId())
+              .title(card.getTitle())
+              .content(card.getContent())
+              .startDate(card.getStartDate())
+              .dueDate(card.getDueDate())
+              .username(card.getAuthor().getUsername())
+              .cardUsers(card.getCardUsers())
+              .comments(card.getComments().stream().map(CommentResponseDto::of).toList())
+              .build();
+    }
 }

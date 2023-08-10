@@ -2,6 +2,7 @@ package com.sparta.with.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.SignupRequestDto;
+import com.sparta.with.dto.UserResponseDto;
 import com.sparta.with.entity.redishash.Blacklist;
 import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.entity.User;
@@ -114,5 +115,8 @@ public class UserService {
     public User findUserByUsername(String username) {
           return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
-    
+
+    public UserResponseDto getUserInfo(User user) {
+        return UserResponseDto.of(user);
+    }
 }

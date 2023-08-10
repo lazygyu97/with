@@ -50,9 +50,9 @@ public class BoardController {
 
             BoardResponseDto result = boardService.createBoard(boardRequestDto, userDetails.getUser());
 
-            String successMessage = "\nCreate Kanban board Success.";//삭제 가능
-            System.out.println(successMessage);//삭제 가능
-            return ResponseEntity.status(HttpStatus.CREATED).header("Message", successMessage).body(result);
+//            String successMessage = "\nCreate Kanban board Success.";//삭제 가능
+//            System.out.println(successMessage);//삭제 가능
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
             String errorMessage = "\nCreate Kanban board Failed. Reason: " + e.getMessage();
             System.err.println(errorMessage);
@@ -100,7 +100,7 @@ public class BoardController {
 
     // 보드 설명 수정
     @Operation(summary = "update Board's Info", description = "칸반 보드 설명 수정")
-    @PutMapping("/boards/{id}/intros")
+    @PutMapping("/boards/{id}/infos")
     public ResponseEntity<ApiResponseDto> updateBoardInfo(@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto) {
         Board board = boardService.findBoard(id);
         boardService.updateBoardInfo(board, boardRequestDto);
