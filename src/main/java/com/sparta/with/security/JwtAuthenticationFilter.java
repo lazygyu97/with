@@ -12,12 +12,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.Builder;
+
+import java.util.Optional;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -58,6 +61,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = user.getUsername();
         UserRoleEnum role = user.getRole();
         Long id = user.getId();
+
+        System.out.println(id);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByMemberId(id);
+        refreshToken.ifPresent(token -> System.out.println(token.getRefreshToken()));
+        refreshToken.ifPresent(token -> refreshTokenRepository.deleteByMemberId(id));
 
         String refreshTokenVal = UUID.randomUUID().toString();
         refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));

@@ -21,7 +21,7 @@ public class BoardResponseDto {
     private String color;
     private String info;
     private List<BoardUser> boardUsers;
-    private List<Area> areas;
+    private List<AreaResponseDto> areas;
 
 
     public static BoardResponseDto of(Board board) {
@@ -31,6 +31,7 @@ public class BoardResponseDto {
                 .author(board.getAuthor().getUsername())
                 .color(board.getColor())
                 .info(board.getInfo())
+                .areas(board.getAreas().stream().map(AreaResponseDto::of).toList())
                 .build();
     }
 }

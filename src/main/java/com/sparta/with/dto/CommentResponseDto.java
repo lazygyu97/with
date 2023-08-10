@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentResponseDto extends ApiResponseDto{
-  private long Id;
+  private long id;
   private long cardId;
   private String content;
   private String username;
@@ -23,7 +23,7 @@ public class CommentResponseDto extends ApiResponseDto{
   private String image;
 
   public CommentResponseDto(Comment comment) {
-    this.Id = comment.getId();
+    this.id = comment.getId();
     this.cardId = comment.getCard().getId();
     this.content = comment.getContent();
     this.username = comment.getAuthor().getUsername();
@@ -31,4 +31,16 @@ public class CommentResponseDto extends ApiResponseDto{
     this.modifiedAt = comment.getModifiedAt();
     this.image = comment.getAuthor().getImage();
   }
+
+    public static CommentResponseDto of(Comment comment) {
+      return CommentResponseDto.builder()
+              .id(comment.getId())
+              .cardId(comment.getCard().getId())
+              .content(comment.getContent())
+              .username(comment.getAuthor().getUsername())
+              .createdAt(comment.getCreatedAt())
+              .modifiedAt(comment.getModifiedAt())
+              .image(comment.getAuthor().getImage())
+              .build();
+    }
 }
