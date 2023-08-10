@@ -106,6 +106,8 @@ public class BoardService {
     // 내 칸반 보드의 협업자 명단 수정
     @Transactional
     public void updateCollaborator(BoardUser boardUser, User newCollaborator) {
+
+        //명단에 내가 이미 있어서 또 초대할 필요가 없는지 확인
         if (boardUser.getBoard().getBoardUsers().stream().anyMatch(user -> user.getCollaborator().equals(newCollaborator))) {
             throw new IllegalArgumentException("이미 협업자로 할당된 사용자입니다.");
         }

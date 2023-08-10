@@ -60,7 +60,7 @@ public class BoardController {
         }
     }
 
-    // 전체 조회 (본인이 생성한 보드)
+    // 전체 칸반 보드 조회 (본인이 생성한 보드)
     @Operation(summary = "get owner's boards", description = "소유한 칸반 보드 전체 조회")
     @GetMapping("/boards")
     public ResponseEntity<BoardsResponseDto> getBoards() {
@@ -69,7 +69,7 @@ public class BoardController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 단건 조회 (본인이 생성한 보드)
+    // 단건 칸반 보드 조회 (본인이 생성한 보드)
     @Operation(summary = "get owner's board by id", description = "소유한 칸반 보드 단건 조회")
     @GetMapping("/boards/{id}")
     public ResponseEntity<BoardResponseDto> getBoardById(@PathVariable Long id) {
@@ -122,17 +122,16 @@ public class BoardController {
         return ResponseEntity.ok().body(new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value()));
     }
 
-    // 전체 조회 (협업 초대 받은 보드)
+    // 전체 칸반 보드 조회 (협업 초대 받은 보드)
     @Operation(summary = "get collaborator's boards", description = "협업하고 있는 칸반 보드 전체 조회")
     @GetMapping("/boards/collaborators")
     public ResponseEntity<BoardsResponseDto> getCollaboratedBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 수정: 현재 로그인한 사용자의 정보를 @AuthenticationPrincipal로 받아옴
         BoardsResponseDto result = new BoardsResponseDto(boardService.getCollaboratedBoards(userDetails));
 
         return ResponseEntity.ok().body(result);
     }
 
-    // 단건 조회 (협업 초대 받은 보드)
+    // 단건 칸반 보드 조회 (협업 초대 받은 보드)
     @Operation(summary = "get collaborator's board by id", description = "협업하고 있는 칸반 보드 단건 조회")
     @GetMapping("/boards/collaborators/{id}")
     public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(@PathVariable Long id) {
@@ -173,12 +172,17 @@ public class BoardController {
     // 내 칸반 보드의 협업자 명단 수정
     @Operation(summary = "update Collaborators of Board", description = "칸반 보드의 협업자 명단 수정")
     @PutMapping("/boards/collaborators/{boardId}/{boardUserId}")
-    public ResponseEntity<ApiResponseDto> updateCollaborator(@PathVariable Long boardId, @PathVariable Long boardUserId, @RequestBody CollaboratorRequestDto collaboratorRequestDto
+    public ResponseEntity<ApiResponseDto> updateCollaborator(
+        @PathVariable Long boardId,
+        @PathVariable Long boardUserId,
+        @RequestBody CollaboratorRequestDto collaboratorRequestDto
     ) {
-        User newCollaborator = userService.findUserByUsername(collaboratorRequestDto.getUsername());
         Board board = boardService.findBoard(boardId);
         BoardUser boardUser = boardService.findCollaborator(boardUserId);
 
+        User newCollaborator = userService.findUserByUsername(collaboratorRequestDto.getUsername());
+
+        //명단에 내가 있어서 다른 사람으로 협업자를 교대할 수 있는지
         if (!boardUser.getBoard().equals(board)) {
             return ResponseEntity.badRequest().body(new ApiResponseDto("해당 칸반 보드의 협업자가 아닙니다.", HttpStatus.BAD_REQUEST.value()));
         }
@@ -191,5 +195,7 @@ public class BoardController {
 
         return ResponseEntity.ok().body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
     }
+
+    // 내 칸반 보드의 협업자 명단 삭제
 
 }
