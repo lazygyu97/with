@@ -41,17 +41,4 @@ public class CardResponseDto extends ApiResponseDto{
         .collect(Collectors.toList()))
         .build();
   }
-
-    public static CardResponseDto of(Card card) {
-      return CardResponseDto.builder()
-              .id(card.getId())
-              .title(card.getTitle())
-              .content(card.getContent())
-              .startDate(card.getStartDate())
-              .dueDate(card.getDueDate())
-              .username(card.getAuthor().getUsername())
-              .cardUsers(card.getCardUsers())
-              .comments(card.getComments().stream().map(CommentResponseDto::of).toList())
-              .build();
-    }
 }

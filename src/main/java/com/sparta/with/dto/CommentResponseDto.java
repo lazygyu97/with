@@ -29,16 +29,4 @@ public class CommentResponseDto extends ApiResponseDto{
         .image(comment.getAuthor().getImage())
         .build();
   }
-
-    public static CommentResponseDto of(Comment comment) {
-      return CommentResponseDto.builder()
-              .id(comment.getId())
-              .cardId(comment.getCard().getId())
-              .content(comment.getContent())
-              .username(comment.getAuthor().getUsername())
-              .createdAt(comment.getCreatedAt())
-              .modifiedAt(comment.getModifiedAt())
-              .image(comment.getAuthor().getImage())
-              .build();
-    }
 }

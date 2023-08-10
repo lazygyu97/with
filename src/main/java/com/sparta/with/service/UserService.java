@@ -109,7 +109,7 @@ public class UserService {
         }
     }
     
-    //BoardService 협업자 등록에서 현재 사용중 - 삭제될 예정 (boardUser id로 변경 예정)
+    //BoardService 협업자 등록에서 현재 사용중 
     public User findUserByUserid(Long id) {
           return userRepository.findById(id).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
@@ -119,7 +119,7 @@ public class UserService {
     }
 
     //CardService 협업자 등록에서 현재 사용중
-    public User findUserByUserId(Long userId) {
+    public User findUserByUserd(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
 }

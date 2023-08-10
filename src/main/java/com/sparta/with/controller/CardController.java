@@ -108,7 +108,7 @@ public class CardController {
   @PostMapping("/cards/{id}/collaborators")
   public ResponseEntity<ApiResponseDto> addCollaborator(@PathVariable Long id,
       @RequestBody CardUserRequestDto requestDto) {
-    User collaborator = userService.findUserByUserId(requestDto.getUserId());
+    User collaborator = userService.findUserByUserid(requestDto.getUserId());
 
     try {
       cardService.addCollaborator(id, collaborator);
@@ -125,7 +125,7 @@ public class CardController {
   @DeleteMapping("/cards/{id}/collaborators")
   public ResponseEntity<ApiResponseDto> deleteCollaborator(
       @RequestBody CardUserRequestDto requestDto, @PathVariable Long id) {
-    User collaborator = userService.findUserByUserId(requestDto.getUserId());
+    User collaborator = userService.findUserByUserid(requestDto.getUserId());
     try {
       cardService.deleteCollaborator(id, collaborator);
     } catch (IllegalArgumentException e) {

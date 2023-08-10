@@ -33,7 +33,7 @@ public class CommentService {
 
   // 댓글 수정
   @Transactional
-  public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto) {
+  public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
     Comment comment = findComment(id);
 
     comment.updateContent(requestDto.getContent());
@@ -43,7 +43,7 @@ public class CommentService {
 
   @Transactional
   // 댓글 삭제
-  public void deleteComment(Long id) {
+  public void deleteComment(Long id, User user) {
     Comment comment = findComment(id);
 
     commentRepository.delete(comment);

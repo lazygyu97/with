@@ -19,7 +19,7 @@ public class AreaResponseDto {
     this.name = area.getName();
     if (area.getCards() != null) {
       this.cards = area.getCards().stream()
-              .map(CardResponseDto::new)
+              .map(CardResponseDto::of)
               .collect(Collectors.toList());
     }
   }
