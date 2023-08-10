@@ -71,4 +71,9 @@ public class UserController {
     public ResponseEntity getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ResponseEntity.ok().body(userService.getUserInfo(userDetails.getUser()));
     }
+
+    @GetMapping("/all")
+    public ResponseEntity getAllUsers(){
+        return ResponseEntity.ok().body(userService.getAllUsers());
+    }
 }

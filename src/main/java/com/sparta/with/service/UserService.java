@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -119,5 +120,8 @@ public class UserService {
     public UserResponseDto getUserInfo(User user) {
         return UserResponseDto.of(user);
     }
-    
+
+    public List<UserResponseDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserResponseDto::of).toList();
+    }
 }
