@@ -12,8 +12,6 @@ import com.sparta.with.repository.BlacklistRepository;
 import com.sparta.with.repository.EmailVerificationRepository;
 import com.sparta.with.repository.RefreshTokenRepository;
 import com.sparta.with.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -113,6 +111,10 @@ public class UserService {
     //BoardService 협업자 등록에서 현재 사용중 - 삭제될 예정 (boardUser id로 변경 예정)
     public User findUserByUsername(String username) {
           return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+    }
+    //CardService 협업자 등록에서 현재 사용중
+    public User findUserByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
     
 }
