@@ -1,5 +1,6 @@
 package com.sparta.with.entity;
 
+import com.sparta.with.dto.CardRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,39 +27,78 @@ import lombok.NoArgsConstructor;
 @Table(name = "cards")
 public class Card extends Timestamped {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_id", nullable = false)
-    private Area area;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "card",orphanRemoval = true)
-    private List<CardUser> cardUsers = new ArrayList<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_id", nullable = false)
+  private Area area;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "card",orphanRemoval = true)
-    private List<CheckList> checkLists = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "card", orphanRemoval = true)
+  private List<CardUser> cardUsers = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "card",orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "card", orphanRemoval = true)
+  private List<CheckList> checkLists = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String content;
+  @Builder.Default
+  @OneToMany(mappedBy = "card", orphanRemoval = true)
+  private List<Comment> comments = new ArrayList<>();
 
-    @Column
-    private LocalDateTime startDate;
+  @Column(nullable = false)
+  private String title;
 
-    @Column
-    private LocalDateTime dueDate;
+  @Column
+  private String content;
 
-    @Column
-    private String color;
+  @Column
+  private LocalDateTime startDate;
 
-    @Column
-    private String image;
+  @Column
+  private LocalDateTime dueDate;
+
+  @Column
+  private String color;
+
+  @Column
+  private String image;
+
+  @Builder
+  public Card(CardRequestDto requestDto) {
+    this.title = requestDto.getTitle();
+  }
+
+  public void setArea(Area area) {
+    this.area = area;
+  }
+  public void setUser(User author) {
+    this.author = author;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  public void setContent(String content) {
+    this.content = content;
+  }
+  public void setStartDate(LocalDateTime startDate) {
+    this.startDate = startDate;
+  }
+  public void setDueDate(LocalDateTime dueDate) {
+    this.dueDate = dueDate;
+  }
+  public void setColor(String color) {
+    this.color = color;
+  }
+  public void setImage(String image) {
+    this.image = image;
+  }
+
+
 
 }
