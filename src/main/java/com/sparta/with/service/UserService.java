@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -109,7 +110,7 @@ public class UserService {
         }
     }
     
-    //BoardService 협업자 등록에서 현재 사용중 
+    //BoardService 협업자 등록에서 현재 사용중
     public User findUserByUserid(Long id) {
           return userRepository.findById(id).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
@@ -118,8 +119,7 @@ public class UserService {
         return UserResponseDto.of(user);
     }
 
-    //CardService 협업자 등록에서 현재 사용중
-    public User findUserByUserd(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+    public List<UserResponseDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserResponseDto::of).toList();
     }
 }

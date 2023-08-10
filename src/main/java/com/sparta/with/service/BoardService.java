@@ -10,6 +10,7 @@ import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
 import com.sparta.with.repository.BoardRepository;
 import com.sparta.with.repository.BoardUserRepository;
+import com.sparta.with.repository.UserRepository;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sun.jdi.request.DuplicateRequestException;
 import java.util.List;
@@ -26,6 +27,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardUserRepository boardUserRepository;
+    private final UserRepository userRepository;
 
     // 보드 생성
     @Transactional
@@ -142,19 +144,22 @@ public class BoardService {
     // 보드 협업자 등록
     // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
     @Transactional
-    public void addCollaborator(Board board, User collaborator) {
+    public void addCollaborator(Long boardId, String collaboratorName, User author) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
+        User collaborator = userRepository.findByUsername(collaboratorName)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
         try {
-            if (board.getBoardUsers().stream()
-                .anyMatch(boardUser -> boardUser.getCollaborator().equals(collaborator))) {
+            if (boardUserRepository.existsByBoard_IdAndCollaborator_Id(boardId, collaborator.getId())) {
                 throw new IllegalArgumentException("칸반 보드에 이미 협업자로 등록된 사용자입니다.");
             }
-
-            if (collaborator.equals(board.getAuthor())) {
+            if (collaborator.equals(author)) {
                 throw new DuplicateRequestException("입력하신 아이디는 칸반 보드의 오너입니다.");
             }
 
             BoardUser boardUser = new BoardUser(collaborator, board);
-            board.getBoardUsers().add(boardUser);
+            boardUserRepository.save(boardUser);
+//            board.getBoardUsers().add(boardUser);
         } catch (Exception e) {
             throw new RuntimeException("협업자 등록에 실패했습니다. 이유: " + e.getMessage(), e);
         }

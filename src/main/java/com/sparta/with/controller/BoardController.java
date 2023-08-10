@@ -1,10 +1,6 @@
 package com.sparta.with.controller;
 
-import com.sparta.with.dto.ApiResponseDto;
-import com.sparta.with.dto.BoardRequestDto;
-import com.sparta.with.dto.BoardResponseDto;
-import com.sparta.with.dto.BoardUsersResponseDto;
-import com.sparta.with.dto.BoardsResponseDto;
+import com.sparta.with.dto.*;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
@@ -18,14 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Board Example API", description = "칸반 보드 API")
 @Slf4j
@@ -132,11 +121,11 @@ public class BoardController {
     // 보드 협업자 등록
     // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
     @PostMapping("/boards/{boardId}/collaborators")
-    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId) {
-        Board board = boardService.findBoard(userDetails.getUser(), boardId);
-        User collaborator = userService.findUserByUserid(userDetails.getUser().getId());
+    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId, @RequestBody CollaboratorRequestDto requestDto) {
+//        Board board = boardService.findBoard(userDetails.getUser(), boardId);
+//        User collaborator = userService.findUserByUserid(userDetails.getUser().getId());
 
-        boardService.addCollaborator(board, collaborator);
+        boardService.addCollaborator(boardId, requestDto.getUsername(), userDetails.getUser());
 
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드에 협업자가 등록되었습니다.", HttpStatus.OK.value()));
