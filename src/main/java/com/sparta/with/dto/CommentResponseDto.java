@@ -15,21 +15,19 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentResponseDto extends ApiResponseDto{
   private long id;
-  private long cardId;
   private String content;
   private String username;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
   private String image;
 
-  public CommentResponseDto(Comment comment) {
-    this.id = comment.getId();
-    this.cardId = comment.getCard().getId();
-    this.content = comment.getContent();
-    this.username = comment.getAuthor().getUsername();
-    this.createdAt = comment.getCreatedAt();
-    this.modifiedAt = comment.getModifiedAt();
-    this.image = comment.getAuthor().getImage();
+  public static CommentResponseDto of(Comment comment) {
+    return CommentResponseDto.builder()
+        .id(comment.getId())
+        .content(comment.getContent())
+        .username(comment.getAuthor().getUsername())
+        .image(comment.getAuthor().getImage())
+        .build();
   }
 
     public static CommentResponseDto of(Comment comment) {

@@ -3,6 +3,7 @@ package com.sparta.with.controller;
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
+import com.sparta.with.dto.BoardUsersResponseDto;
 import com.sparta.with.dto.BoardsResponseDto;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
@@ -158,6 +159,13 @@ public class BoardController {
         boardService.updateCollaborator(board, boardUser, newCollaborator);
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
+    }
+    // 내 칸반 보드에 협업자 조회 (카드 내 Members - Board members 와 동일)
+    @GetMapping("/boards/get-collaborators/{boardId}")
+    public ResponseEntity<BoardUsersResponseDto> getBoardUsers(@PathVariable Long boardId) {
+        BoardUsersResponseDto boardUser = boardService.getBoardUsers(boardId);
+
+        return ResponseEntity.ok().body(boardUser);
     }
 
     // 보드 협업자 삭제

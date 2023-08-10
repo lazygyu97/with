@@ -4,6 +4,8 @@ import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.CardRequestDto;
 import com.sparta.with.dto.CardListResponseDto;
 import com.sparta.with.dto.CardResponseDto;
+import com.sparta.with.dto.CardUserRequestDto;
+import com.sparta.with.dto.CardUsersResponseDto;
 import com.sparta.with.entity.User;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.CardService;
@@ -63,8 +65,8 @@ public class CardController {
   public ResponseEntity<CardResponseDto> updateContent(@PathVariable Long id,
       @RequestBody CardRequestDto requestDto) {
 
-      CardResponseDto result = cardService.updateContent(id, requestDto);
-      return ResponseEntity.ok().body(result);
+    CardResponseDto result = cardService.updateContent(id, requestDto);
+    return ResponseEntity.ok().body(result);
   }
 
   // 카드 컬러 수정
@@ -72,8 +74,8 @@ public class CardController {
   public ResponseEntity<CardResponseDto> updateColor(@PathVariable Long id,
       @RequestBody CardRequestDto requestDto) {
 
-      CardResponseDto result = cardService.updateColor(id, requestDto);
-      return ResponseEntity.ok().body(result);
+    CardResponseDto result = cardService.updateColor(id, requestDto);
+    return ResponseEntity.ok().body(result);
   }
 
   // 카드 기간 수정
@@ -94,11 +96,19 @@ public class CardController {
     return ResponseEntity.ok().body(result);
   }
 
+  // 카드에 협업자 목록 보여주기
+  @GetMapping("/cards/{id}/collaborators")
+  public ResponseEntity<CardUsersResponseDto> getCardUsers(@PathVariable Long id) {
+    CardUsersResponseDto cardUser = cardService.getCardUsers(id);
+
+    return ResponseEntity.ok().body(cardUser);
+  }
+
   // 카드에 작업자 할당
-  @PutMapping("/cards/{id}/collaborators")
+  @PostMapping("/cards/{id}/collaborators")
   public ResponseEntity<ApiResponseDto> addCollaborator(@PathVariable Long id,
-      @RequestBody CollaboratorRequestDto collaboratorRequestDto) {
-    User collaborator = userService.findUserByUsername(collaboratorRequestDto.getUsername());
+      @RequestBody CardUserRequestDto requestDto) {
+    User collaborator = userService.findUserByUserId(requestDto.getUserId());
 
     try {
       cardService.addCollaborator(id, collaborator);
@@ -111,7 +121,21 @@ public class CardController {
         .body(new ApiResponseDto("카드에 협업자가 등록되었습니다.", HttpStatus.OK.value()));
   }
 
-  // 카드에 작업자 변경
+  // 카드에 작업자 삭제
+  @DeleteMapping("/cards/{id}/collaborators")
+  public ResponseEntity<ApiResponseDto> deleteCollaborator(
+      @RequestBody CardUserRequestDto requestDto, @PathVariable Long id) {
+    User collaborator = userService.findUserByUserId(requestDto.getUserId());
+    try {
+      cardService.deleteCollaborator(id, collaborator);
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest()
+          .body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    }
+
+    return ResponseEntity.status(HttpStatus.ACCEPTED)
+        .body(new ApiResponseDto("카드에 협업자가 삭제되었습니다.", HttpStatus.ACCEPTED.value()));
+  }
 
 
   // 카드 삭제
@@ -119,7 +143,7 @@ public class CardController {
   public ResponseEntity<ApiResponseDto> deletePost(@PathVariable Long id) {
     try {
       cardService.deleteCard(id);
-      return ResponseEntity.ok().body(new ApiResponseDto("게시글 삭제 성공", HttpStatus.OK.value()));
+      return ResponseEntity.ok().body(new ApiResponseDto("카드 삭제 성공", HttpStatus.OK.value()));
     } catch (RejectedExecutionException e) {
       return ResponseEntity.badRequest().build();
     }
