@@ -55,13 +55,6 @@ public class Board extends Timestamped {
     @Builder.Default
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Area> areas = new ArrayList<>();
-//
-//    public Board(BoardRequestDto boardRequestDto, User author) {
-//        this.name = boardRequestDto.getName();
-//        this.color = boardRequestDto.getColor();
-//        this.info = boardRequestDto.getInfo();
-//        this.author = author;
-//    }
 
     public void updateName(BoardRequestDto boardRequestDto) {
         this.name = boardRequestDto.getName();

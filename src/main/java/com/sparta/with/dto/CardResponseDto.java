@@ -4,6 +4,7 @@ import com.sparta.with.entity.Card;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,4 +41,17 @@ public class CardResponseDto extends ApiResponseDto{
         .collect(Collectors.toList()))
         .build();
   }
+
+    public static CardResponseDto of(Card card) {
+      return CardResponseDto.builder()
+              .id(card.getId())
+              .title(card.getTitle())
+              .content(card.getContent())
+              .startDate(card.getStartDate())
+              .dueDate(card.getDueDate())
+              .username(card.getAuthor().getUsername())
+              .cardUsers(card.getCardUsers())
+              .comments(card.getComments().stream().map(CommentResponseDto::of).toList())
+              .build();
+    }
 }

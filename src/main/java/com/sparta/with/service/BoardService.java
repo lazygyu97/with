@@ -3,7 +3,7 @@ package com.sparta.with.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
-import com.sparta.with.dto.BoardsResponseDto;
+import com.sparta.with.dto.BoardUsersResponseDto;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
@@ -173,15 +173,8 @@ public class BoardService {
         }
     }
 
-    @Transactional(readOnly = true)
-    // 내 칸반 보드의 협업자 명단 조회
-    public BoardUsersResponseDto getBoardUsers(Long id) {
-        List<BoardUser> boardList = boardUserRepository.findByBoard_Id(id);
-
-        return BoardUsersResponseDto.of(boardList);
-    }
     // 보드 협업자 삭제
-    @Transactional
+  @Transactional
     public void deleteCollaborator(Board board, BoardUser boardUser) {
         try {
             if (!boardUser.getBoard().equals(board)) {
@@ -191,6 +184,13 @@ public class BoardService {
         } catch (Exception e) {
             throw new RuntimeException("협업자 삭제에 실패했습니다. 이유: " + e.getMessage(), e);
         }
+
+  @Transactional(readOnly = true)
+    // 내 칸반 보드의 협업자 명단 조회
+    public BoardUsersResponseDto getBoardUsers(Long id) {
+        List<BoardUser> boardList = boardUserRepository.findByBoard_Id(id);
+
+        return BoardUsersResponseDto.of(boardList);
     }
 
     public Board findBoard(User author, Long id) {

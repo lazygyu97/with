@@ -3,23 +3,20 @@ package com.sparta.with.controller;
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
+import com.sparta.with.dto.BoardUsersResponseDto;
 import com.sparta.with.dto.BoardsResponseDto;
-import com.sparta.with.dto.CollaboratorRequestDto;
 import com.sparta.with.entity.Board;
 import com.sparta.with.entity.BoardUser;
 import com.sparta.with.entity.User;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.BoardService;
 import com.sparta.with.service.UserService;
-import com.sun.jdi.request.DuplicateRequestException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.concurrent.RejectedExecutionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class BoardController {
+
     private final UserService userService;
     private final BoardService boardService;
 
@@ -76,16 +74,6 @@ public class BoardController {
         boardService.deleteBoard(board, userDetails.getUser());
         return ResponseEntity.ok().body(new ApiResponseDto("칸반 보드 삭제 성공", HttpStatus.OK.value()));
     }
-
-    // 단건 조회 (협업 초대 받은 보드)
-    @Operation(summary = "get collaborator's board by id", description = "협업하고 있는 칸반 보드 단건 조회")
-    @GetMapping("/boards/collaborators/{id}")
-    public ResponseEntity<BoardResponseDto> getCollaboratedBoardById(@PathVariable Long id) {
-        BoardResponseDto result = boardService.getCollaboratedBoardById(id);
-
-        return ResponseEntity.ok().body(result);
-    }
-
 
     // 보드 이름 수정
     @Operation(summary = "update Board's Name", description = "칸반 보드 이름 수정")
@@ -172,6 +160,13 @@ public class BoardController {
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
     }
+    // 내 칸반 보드에 협업자 조회 (카드 내 Members - Board members 와 동일)
+    @GetMapping("/boards/get-collaborators/{boardId}")
+    public ResponseEntity<BoardUsersResponseDto> getBoardUsers(@PathVariable Long boardId) {
+        BoardUsersResponseDto boardUser = boardService.getBoardUsers(boardId);
+
+        return ResponseEntity.ok().body(boardUser);
+    }
 
     // 보드 협업자 삭제
     @Operation(summary = "update Collaborators of Board", description = "칸반 보드의 협업자 명단 수정")
@@ -184,14 +179,8 @@ public class BoardController {
         Board board = boardService.findBoard(userDetails.getUser(), boardId);
         BoardUser boardUser = boardService.findCollaborator(boardUserId);
 
-        return ResponseEntity.ok().body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
+        boardService.deleteCollaborator(board, boardUser);
+        return ResponseEntity.ok()
+            .body(new ApiResponseDto("칸반 보드의 협업자가 삭제되었습니다.", HttpStatus.OK.value()));
     }
-    // 내 칸반 보드에 협업자 조회 (카드 내 Members - Board members 와 동일)
-    @GetMapping("/boards/get-collaborators/{boardId}")
-    public ResponseEntity<BoardUsersResponseDto> getBoardUsers(@PathVariable Long boardId) {
-        BoardUsersResponseDto boardUser = boardService.getBoardUsers(boardId);
-
-        return ResponseEntity.ok().body(boardUser);
-    }
-
 }
