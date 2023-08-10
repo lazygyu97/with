@@ -11,14 +11,10 @@ import lombok.Getter;
 public class BoardsResponseDto extends ApiResponseDto {
     private List<BoardResponseDto> boards;
 
-    public BoardsResponseDto(List<BoardResponseDto> boards) {
-        this.boards = boards;
-    }
-
-    private static BoardsResponseDto of(List<Board> boards){
-        List<BoardResponseDto> boardResponseDtos = boards.stream().map(BoardResponseDto::of).toList();
+    public static BoardsResponseDto of(List<Board> boards){
+        List<BoardResponseDto> boardsResponseDto = boards.stream().map(BoardResponseDto::of).toList();
         return BoardsResponseDto.builder()
-                .boards(boardResponseDtos)
+                .boards(boardsResponseDto)
                 .build();
     }
 }
