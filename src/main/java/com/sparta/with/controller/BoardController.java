@@ -160,7 +160,7 @@ public class BoardController {
             .body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
     }
 
-    // 보드 협업자 삭제 - 추후 작업
+    // 보드 협업자 삭제
     @Operation(summary = "update Collaborators of Board", description = "칸반 보드의 협업자 명단 수정")
     @DeleteMapping("/boards/collaborators/{boardId}/{boardUserId}")
     public ResponseEntity<ApiResponseDto> deleteCollaborator(

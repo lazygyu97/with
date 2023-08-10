@@ -173,7 +173,7 @@ public class BoardService {
         }
     }
 
-    // 보드 협업자 삭제 - 추후 작업
+    // 보드 협업자 삭제
     public void deleteCollaborator(Board board, BoardUser boardUser) {
         try {
             if (!boardUser.getBoard().equals(board)) {
