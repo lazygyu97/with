@@ -185,11 +185,10 @@ public class BoardService {
 
     // 보드 협업자 삭제
     @Transactional
-    public void deleteCollaborator(Board board, BoardUser boardUser) {
+    public void deleteCollaborator(Long boardId, Long userId) {
+        BoardUser boardUser = boardUserRepository.findByBoard_IdAndCollaborator_Id(boardId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 칸반 보드의 협업자가 아닙니다."));
         try {
-            if (!boardUser.getBoard().equals(board)) {
-                throw new IllegalArgumentException("해당 칸반 보드의 협업자가 아닙니다.");
-            }
             boardUserRepository.delete(boardUser);
         } catch (Exception e) {
             throw new RuntimeException("협업자 삭제에 실패했습니다. 이유: " + e.getMessage(), e);
