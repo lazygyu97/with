@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardUserResponseDto extends ApiResponseDto {
-  private String collaborator;
+public class BoardUserResponseDto {
 
-  public static BoardUserResponseDto of(BoardUser boardUser) {
-    return BoardUserResponseDto.builder()
-        .collaborator(boardUser.getCollaborator().getUsername())
-        .build();
-  }
+    private String collaborator;
+
+    public static BoardUserResponseDto of(BoardUser boardUser) {
+        return BoardUserResponseDto.builder()
+            .collaborator(boardUser.getCollaborator().getUsername())
+            .build();
+    }
 }

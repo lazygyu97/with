@@ -119,13 +119,13 @@ public class BoardController {
 
 
     // 보드 협업자 등록
-    // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
-    @PostMapping("/boards/{boardId}/collaborators")
-    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId, @RequestBody CollaboratorRequestDto requestDto) {
+    // 허락받아야 초대되는 로직으로 변경하기 - 추후 작업
+    @Operation(summary = "add Collaborators of Board", description = "칸반 보드에 협업자 등록")
+    @PostMapping("/boards/collaborators/{boardId}/{boardUserId}")
+    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId, @PathVariable Long boardUserId) {
 //        Board board = boardService.findBoard(userDetails.getUser(), boardId);
 //        User collaborator = userService.findUserByUserid(userDetails.getUser().getId());
-
-        boardService.addCollaborator(boardId, requestDto.getUsername(), userDetails.getUser());
+        boardService.addCollaborator(boardId, boardUserId, userDetails.getUser());
 
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드에 협업자가 등록되었습니다.", HttpStatus.OK.value()));
@@ -147,7 +147,8 @@ public class BoardController {
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
     }
-    // 내 칸반 보드에 협업자 조회 (카드 내 Members - Board members 와 동일)
+
+    // 보드 협업자 조회 (카드 내 Members - Board members 와 동일)
     @GetMapping("/boards/get-collaborators/{boardId}")
     public ResponseEntity<BoardUsersResponseDto> getBoardUsers(@PathVariable Long boardId) {
         BoardUsersResponseDto boardUser = boardService.getBoardUsers(boardId);

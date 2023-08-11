@@ -18,7 +18,7 @@ public class BoardExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDto> handleException(Exception e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        String errorMessage = "서버에서 오류가 발생했습니다. 관리자에게 문의하세요.";
+        String errorMessage = "서버에서 오류가 발생했습니다.";
 
         if (e instanceof AuthenticationServiceException) {
             // 로그인을 실패한 경우
@@ -30,7 +30,7 @@ public class BoardExceptionHandler {
             errorMessage = "요청하신 것을 찾을 수 없습니다. 이유: " + e.getMessage();
         } else if (e instanceof IllegalArgumentException) {
             status = HttpStatus.BAD_REQUEST;
-            errorMessage = "잘못된 인자를 요청하셨습니다. 이유: " + e.getMessage();
+            errorMessage = "요청에 문제가 있습니다. 이유: " + e.getMessage();
         }
 
         log.error(errorMessage, e);
