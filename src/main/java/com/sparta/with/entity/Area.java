@@ -44,11 +44,6 @@ public class Area {
     @Column(nullable = false)
     private int position;
 
-//    public Area(AreaRequestDto requestDto) {
-//        this.name = requestDto.getName();
-//        this.position = requestDto.getPosition();
-//    }
-
     public void updateName(AreaRequestDto areaRequestDto) {
         this.name = areaRequestDto.getName();
     }
