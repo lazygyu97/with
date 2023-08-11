@@ -22,7 +22,7 @@ public class BoardResponseDto {
     private String info;
     private String message;
     private Integer statusCode;
-    private List<BoardUser> boardUsers;
+    private List<BoardUserResponseDto> boardUsers;
     private List<AreaResponseDto> areas;
 
     public static BoardResponseDto of(Board board) {
@@ -32,7 +32,7 @@ public class BoardResponseDto {
                 .author(board.getAuthor().getUsername())
                 .color(board.getColor())
                 .info(board.getInfo())
-                .boardUsers(board.getBoardUsers())
+                .boardUsers(board.getBoardUsers().stream().map(BoardUserResponseDto::of).toList())
                 .areas(board.getAreas().stream().map(AreaResponseDto::of).toList())
                 .build();
     }

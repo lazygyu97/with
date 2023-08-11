@@ -200,11 +200,11 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     // 내 칸반 보드의 협업자 명단 조회
-//    public BoardUsersResponseDto getBoardUsers(Long id) {
-//        List<BoardUser> boardList = boardUserRepository.findByBoard_Id(id);
-//
-//        return BoardUsersResponseDto.of(boardList);
-//    }
+    public BoardUsersResponseDto getBoardUsers(Long id) {
+        List<BoardUser> boardList = boardUserRepository.findByBoard_Id(id);
+
+        return BoardUsersResponseDto.of(boardList);
+    }
 
     public Board findBoard(User author, Long id) {
         if (author == null) {
