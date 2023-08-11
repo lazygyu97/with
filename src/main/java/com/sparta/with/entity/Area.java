@@ -44,13 +44,12 @@ public class Area {
     @Column(nullable = false)
     private int position;
 
-    public Area(AreaRequestDto requestDto) {
-        this.name = requestDto.getName();
-        this.position = requestDto.getPosition();
-    }
+//    public Area(AreaRequestDto requestDto) {
+//        this.name = requestDto.getName();
+//        this.position = requestDto.getPosition();
+//    }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public void updateName(AreaRequestDto areaRequestDto) {
+        this.name = areaRequestDto.getName();
     }
-
 }

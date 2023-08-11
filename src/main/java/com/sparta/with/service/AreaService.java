@@ -12,21 +12,50 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AreaService {
-  private final BoardRepository boardRepository;
-  private final AreaRepository areaRepository;
 
-  // 컬럼생성
-  public AreaResponseDto createArea(AreaRequestDto requestDto) {
-    // 선택한 보드에 컬럼 등록
-    Board board = boardRepository.findById(requestDto.getBoardId()).orElseThrow(
-        () -> new IllegalArgumentException("해당 보드가 존재하지 않습니다.")
-    );
+    private final BoardRepository boardRepository;
+    private final AreaRepository areaRepository;
 
-    Area area = new Area(requestDto);
-    area.setBoard(board);
+    // 컬럼 생성
+    public AreaResponseDto createArea(AreaRequestDto areaRequestDto) {
+        try {
+            // 선택한 보드에 컬럼 등록
+            Board board = boardRepository.findById(areaRequestDto.getBoardId()).orElseThrow(
+                () -> new IllegalArgumentException("해당 보드가 존재하지 않습니다.")
+            );
 
-    areaRepository.save(area);
+            Area area = areaRequestDto.toEntity();
+            areaRepository.save(area);
 
-    return new AreaResponseDto(area);
-  }
+            return AreaResponseDto.of(area);
+        } catch (Exception e) {
+            throw new RuntimeException("에리아 생성에 실패했습니다. 이유 : " + e.getMessage(), e);
+        }
+    }
+
+    // 컬럼 이름 수정
+    public Area updateAreaName(Area area, AreaRequestDto areaRequestDto) {
+        try {
+            area.updateName(areaRequestDto);
+            return area;
+        } catch (Exception e) {
+            throw new RuntimeException("에리아 이름 수정에 실패했습니다. 이유 : " + e.getMessage(), e);
+        }
+    }
+
+    // 컬럼 삭제
+    public void deleteAreaName(Area area) {
+        try {
+            areaRepository.delete(area);
+        } catch (Exception e) {
+            throw new RuntimeException("에리아 삭제에 실패했습니다. 이유 : " + e.getMessage(), e);
+        }
+    }
+
+    // 컬럼 순서 이동 - 추후 작업
+
+    public Area findArea(Long id) {
+        return areaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 에리아입니다."));
+    }
 }

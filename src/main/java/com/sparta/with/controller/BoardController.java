@@ -63,7 +63,7 @@ public class BoardController {
 
     // 보드 이름 수정
     @Operation(summary = "update Board's Name", description = "칸반 보드 이름 수정")
-    @PutMapping("/boards/{id}/names")
+    @PutMapping("/boards/names/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardName(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long id,
@@ -77,7 +77,7 @@ public class BoardController {
 
     // 보드 배경색상 수정
     @Operation(summary = "update Board's Color", description = "칸반 보드 배경색상 수정")
-    @PutMapping("/boards/{id}/colors")
+    @PutMapping("/boards/colors/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardColor(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long id,
@@ -91,7 +91,7 @@ public class BoardController {
 
     // 보드 설명 수정
     @Operation(summary = "update Board's Info", description = "칸반 보드 설명 수정")
-    @PutMapping("/boards/{id}/infos")
+    @PutMapping("/boards/infos/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardInfo(
         @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id,
         @RequestBody BoardRequestDto boardRequestDto) {
