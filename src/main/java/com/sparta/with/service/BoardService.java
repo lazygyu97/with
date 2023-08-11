@@ -121,10 +121,6 @@ public class BoardService {
                 .map(BoardUser::getBoard)
                 .collect(Collectors.toList());
 
-//            List<BoardResponseDto> boardsResponseDto = collaboratedBoards.stream()
-//                .map(BoardResponseDto::of)
-//                .collect(Collectors.toList());
-
             return BoardsResponseDto.of(collaboratedBoards);
         } catch (Exception e) {
             throw new RuntimeException("협업 중인 칸반 보드 조회를 실패했습니다. 이유: " + e.getMessage(), e);
@@ -159,8 +155,6 @@ public class BoardService {
             }
 
             BoardUser boardUser = BoardUserRequestDto.toEntity(collaborator, board);
-//            BoardUser boardUser = new BoardUser(collaborator, board);
-//            board.getBoardUsers().add(boardUser);
             boardUserRepository.save(boardUser);
         } catch (Exception e) {
             throw new RuntimeException("협업자 등록에 실패했습니다. 이유: " + e.getMessage(), e);
