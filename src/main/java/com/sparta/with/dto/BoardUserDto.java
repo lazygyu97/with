@@ -1,9 +1,9 @@
 package com.sparta.with.dto;
-
-import java.util.List;
 import lombok.Getter;
+import java.util.List;
 
 @Getter
 public class BoardUserDto {
-    private List<String> collaboratorNames;
+    private List<String> collaborators;
+
 }

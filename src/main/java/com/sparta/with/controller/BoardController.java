@@ -158,16 +158,13 @@ public class BoardController {
 
     // 보드 협업자 삭제
     @Operation(summary = "update Collaborators of Board", description = "칸반 보드의 협업자 명단 수정")
-    @DeleteMapping("/boards/collaborators/{boardId}/{boardUserId}")
+    @DeleteMapping("/boards/collaborators/{boardId}/{userId}")
     public ResponseEntity<ApiResponseDto> deleteCollaborator(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long boardId,
-        @PathVariable Long boardUserId
+        @PathVariable Long userId
     ) {
-        Board board = boardService.findBoard(userDetails.getUser(), boardId);
-        BoardUser boardUser = boardService.findCollaborator(boardUserId);
-
-        boardService.deleteCollaborator(board, boardUser);
+        boardService.deleteCollaborator(boardId, userId);
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 삭제되었습니다.", HttpStatus.OK.value()));
     }
