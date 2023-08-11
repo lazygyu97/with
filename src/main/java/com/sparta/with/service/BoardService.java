@@ -3,6 +3,7 @@ package com.sparta.with.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.sparta.with.dto.BoardRequestDto;
 import com.sparta.with.dto.BoardResponseDto;
+import com.sparta.with.dto.BoardUserRequestDto;
 import com.sparta.with.dto.BoardUsersResponseDto;
 import com.sparta.with.dto.BoardsResponseDto;
 import com.sparta.with.entity.Board;
@@ -120,10 +121,6 @@ public class BoardService {
                 .map(BoardUser::getBoard)
                 .collect(Collectors.toList());
 
-            List<BoardResponseDto> boardResponseDtos = collaboratedBoards.stream()
-                .map(BoardResponseDto::of)
-                .collect(Collectors.toList());
-
             return BoardsResponseDto.of(collaboratedBoards);
         } catch (Exception e) {
             throw new RuntimeException("협업 중인 칸반 보드 조회를 실패했습니다. 이유: " + e.getMessage(), e);
@@ -144,10 +141,10 @@ public class BoardService {
     // 보드 협업자 등록
     // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
     @Transactional
-    public void addCollaborator(Long boardId, String collaboratorName, User author) {
+    public void addCollaborator(Long boardId, Long boardUserId, User author) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
-        User collaborator = userRepository.findByUsername(collaboratorName)
+        User collaborator = userRepository.findById(boardUserId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
         try {
             if (boardUserRepository.existsByBoard_IdAndCollaborator_Id(boardId, collaborator.getId())) {
@@ -157,9 +154,8 @@ public class BoardService {
                 throw new DuplicateRequestException("입력하신 아이디는 칸반 보드의 오너입니다.");
             }
 
-            BoardUser boardUser = new BoardUser(collaborator, board);
+            BoardUser boardUser = BoardUserRequestDto.toEntity(collaborator, board);
             boardUserRepository.save(boardUser);
-//            board.getBoardUsers().add(boardUser);
         } catch (Exception e) {
             throw new RuntimeException("협업자 등록에 실패했습니다. 이유: " + e.getMessage(), e);
         }

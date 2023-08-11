@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 //User : 회원1, 회원2, 회원3
 //User -> BoardUser : 회원 1을 Collaborator로 등록
@@ -35,11 +36,6 @@ public class BoardUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
-
-    public BoardUser(User collaborator, Board board) {
-        this.collaborator = collaborator;
-        this.board = board;
-    }
 
     public void updateCollaborator(User newCollaborator) {
         if (this.collaborator != null) {

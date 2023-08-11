@@ -51,17 +51,17 @@ public class UserController {
         return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
 
-    @PostMapping("/login/mail")
+    @PostMapping("/signup/mail")
     public ResponseEntity mailSend(@RequestBody EmailRequestDto requestDto) throws Exception {
         return ResponseEntity.status(201).body(emailService.sendSimpleMessage(requestDto.getEmail()));
     }
 
-    @GetMapping("/login/mail")
+    @GetMapping("/signup/mail")
     public ResponseEntity mailVerification(@RequestBody EmailVerificationRequestDto requestDto){
         emailService.mailVerification(requestDto);
         return ResponseEntity.ok().body("이메일이 인증되었습니다.");
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout") // @Post 변경 예정
     public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
         userService.logout(userDetails.getUser(), request);
         return ResponseEntity.ok().body("로그아웃 완료");
