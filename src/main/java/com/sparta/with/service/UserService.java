@@ -8,6 +8,7 @@ import com.sparta.with.entity.redishash.EmailVerification;
 import com.sparta.with.entity.User;
 import com.sparta.with.entity.UserRoleEnum;
 import com.sparta.with.entity.redishash.RefreshToken;
+import com.sparta.with.file.S3Uploader;
 import com.sparta.with.jwt.JwtUtil;
 import com.sparta.with.repository.BlacklistRepository;
 import com.sparta.with.repository.EmailVerificationRepository;
@@ -21,9 +22,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +41,8 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BlacklistRepository blacklistRepository;
     private final JwtUtil jwtUtil;
+    private final S3Uploader s3Uploader;
+
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -119,5 +125,25 @@ public class UserService {
     public UserResponseDto getUserInfo(User user) {
         return UserResponseDto.of(user);
     }
-    
+
+    public UserResponseDto updateProfile(Long id, MultipartFile image) {
+
+        User user = findUserByUserid(id);
+
+        if (image != null) {
+            try {
+                // 프로필 사진 S3 업로드
+                String imageUrl = s3Uploader.upload(image, "image");
+                user.updateImage(imageUrl);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return UserResponseDto.of(user);
+    }
+
+    public List<UserResponseDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserResponseDto::of).toList();
+    }
 }

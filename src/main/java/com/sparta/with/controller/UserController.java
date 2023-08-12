@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Tag(name="User Example API", description = "사용자와 관련된 API 예제입니다.")
@@ -70,5 +73,20 @@ public class UserController {
     @GetMapping
     public ResponseEntity getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ResponseEntity.ok().body(userService.getUserInfo(userDetails.getUser()));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity getAllUsers(){
+        return ResponseEntity.ok().body(userService.getAllUsers());
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
+        Long userId = userDetails.getUser().getId(); // 사용자 id
+
+        userService.updateProfile(userId, image);
+
+        return ResponseEntity.ok().body(userService.updateProfile(userId, image));
     }
 }

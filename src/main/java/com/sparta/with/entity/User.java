@@ -65,5 +65,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    public void updateImage(String image) {
+        this.image = image;
+    }
 
 }
