@@ -91,6 +91,4 @@ public class Card extends Timestamped {
     public void updateImage(String image) {
         this.image = image;
     }
-
-
 }

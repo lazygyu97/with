@@ -14,8 +14,6 @@ import java.util.List;
 
 import lombok.*;
 
-//User : 회원1, 회원2, 회원3
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +22,6 @@ import lombok.*;
 @Table(name = "users")
 @EqualsAndHashCode(of="id")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,6 +50,10 @@ public class User {
     private List<CardUser> cardUsers = new ArrayList<>();
 
     @Builder.Default
+    @OneToMany(mappedBy = "alarmTarget", orphanRemoval = true)
+    private List<AlarmUser> alarmUsers = new ArrayList<>();
+
+    @Builder.Default
     @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
@@ -60,10 +61,7 @@ public class User {
     @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
-
-
 }

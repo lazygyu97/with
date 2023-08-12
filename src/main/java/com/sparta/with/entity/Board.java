@@ -29,7 +29,6 @@ import lombok.Setter;
 @Setter
 @Table(name = "boards")
 public class Board extends Timestamped {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,14 +38,13 @@ public class Board extends Timestamped {
     private User author;
 
     @Column(nullable = false)
-    private String name;
+    private String name; // 칸반 보드 이름(제목)
 
     @Column
     private String color;
 
     @Column
     private String info;
-
 
     @Builder.Default
     @OneToMany(mappedBy = "board", orphanRemoval = true)
@@ -55,6 +53,10 @@ public class Board extends Timestamped {
     @Builder.Default
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Area> areas = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "alarm_id", orphanRemoval = true)
+    private List<Alarm> alarms = new ArrayList<>();
 
     public void updateName(BoardRequestDto boardRequestDto) {
         this.name = boardRequestDto.getName();

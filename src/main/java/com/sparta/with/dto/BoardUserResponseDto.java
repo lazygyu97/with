@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardUserResponseDto {
-
     private String collaborator;
 
     public static BoardUserResponseDto of(BoardUser boardUser) {
