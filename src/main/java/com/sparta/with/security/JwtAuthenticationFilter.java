@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        refreshToken.ifPresent(token -> refreshTokenRepository.deleteByMemberId(id));
 
         String refreshTokenVal = UUID.randomUUID().toString();
-        refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));
+        refreshTokenRepository.save(new RefreshToken(refreshTokenVal));
         String token = jwtUtil.createToken(username, role);
 
         response.addHeader("RefreshToken", refreshTokenVal);

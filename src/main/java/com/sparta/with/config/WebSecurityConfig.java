@@ -1,6 +1,8 @@
 package com.sparta.with.config;
 
 import com.sparta.with.jwt.JwtUtil;
+import com.sparta.with.oauth2.CustomOAuth2UserService;
+import com.sparta.with.oauth2.OAuth2SuccessHandler;
 import com.sparta.with.repository.BlacklistRepository;
 import com.sparta.with.repository.RefreshTokenRepository;
 import com.sparta.with.security.JwtAuthenticationFilter;
@@ -19,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -29,6 +32,7 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final BlacklistRepository blacklistRepository;
 
@@ -55,9 +59,18 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler(){
+        return new OAuth2SuccessHandler(jwtUtil, refreshTokenRepository);
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
+        http.oauth2Login()
+                .successHandler(authenticationSuccessHandler())
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
         http.cors();
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement((sessionManagement) ->

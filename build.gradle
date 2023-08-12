@@ -17,7 +17,8 @@ repositories {
 
 dependencies {
     // Spring Web, security, thymleaf, mysql,jwt,validation...
-
+    // OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 

@@ -69,4 +69,9 @@ public class User {
         this.image = image;
     }
 
+    public User update(String nickname, String profileImageUrl) {
+        this.nickname = nickname;
+        this.image = profileImageUrl;
+        return this;
+    }
 }
