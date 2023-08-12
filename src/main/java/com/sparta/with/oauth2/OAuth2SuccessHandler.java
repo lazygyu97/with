@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -25,6 +26,9 @@ import java.util.UUID;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    @Value("${front.server.url}")
+    private String frontUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -51,7 +55,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         // 쿠키를 응답 헤더에 추가
         response.addCookie(refreshToken);
         response.addCookie(accessToken);
-        response.sendRedirect("http://localhost:7070/oauth2");
+        response.sendRedirect(frontUrl + "/oauth2");
 
         log.info("로그인성공");
     }
