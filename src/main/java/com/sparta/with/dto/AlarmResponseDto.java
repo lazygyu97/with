@@ -34,7 +34,7 @@ public class AlarmResponseDto {
     private String alarmMessage;
     private List<AlarmUserResponseDto> alarmUsers;
 
-    public AlarmResponseDto of(Alarm alarm, Comment comment) {
+    public static AlarmResponseDto of(Alarm alarm, Comment comment) {
         return AlarmResponseDto.builder()
             .commentWriter(comment.getAuthor().getNickname())
             .commentContent(comment.getContent())

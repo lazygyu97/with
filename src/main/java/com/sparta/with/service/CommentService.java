@@ -1,7 +1,9 @@
 package com.sparta.with.service;
 
+import com.sparta.with.dto.AlarmResponseDto;
 import com.sparta.with.dto.CommentRequestDto;
 import com.sparta.with.dto.CommentResponseDto;
+import com.sparta.with.entity.Alarm;
 import com.sparta.with.entity.Card;
 import com.sparta.with.entity.Comment;
 import com.sparta.with.entity.User;
@@ -17,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-
     private final CommentRepository commentRepository;
     private final CardRepository cardRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -33,6 +34,7 @@ public class CommentService {
         var savedComment = commentRepository.save(comment);
 
         // 댓글 작성될 때마다 알림가게 하기
+        AlarmResponseDto.builder().(commentRepository.)
         savedComment.updateAlarm(eventPublisher);
         log.info("CommentService create comment success");
 
