@@ -2,7 +2,7 @@ package com.sparta.with.controller;
 
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.EmailRequestDto;
-import com.sparta.with.dto.EmailVerificationRequestDto;
+import com.sparta.with.dto.EmailVerificationRequestDto
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.EmailService;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -79,13 +80,13 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
+
     // 프로필 수정
     @PutMapping("/profile")
     public ResponseEntity updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
         @RequestPart(name = "image") MultipartFile image) throws IOException {
-        Long userId = userDetails.getUser().getId(); // 사용자 id
 
-        userService.updateProfile(userId, image);
+        Long userId = userDetails.getUser().getId(); // 사용자 id
 
         return ResponseEntity.ok().body(userService.updateProfile(userId, image));
     }

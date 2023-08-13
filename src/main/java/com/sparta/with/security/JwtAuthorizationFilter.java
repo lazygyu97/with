@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -59,7 +60,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 String refreshTokenVal = UUID.randomUUID().toString();
                 refreshTokenRepository.delete(refToken);
-                refreshTokenRepository.save(new RefreshToken(refreshTokenVal, id));
+                refreshTokenRepository.save(new RefreshToken(refreshTokenVal));
                 tokenValue = jwtUtil.createToken(userDetails.getUsername(), ((UserDetailsImpl) userDetails).getRole())
                         .substring(7);
                 res.addHeader("RefreshToken", refreshTokenVal);
@@ -74,8 +75,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try {
                 setAuthentication(info.getSubject());
             } catch (Exception e) {
-                log.error(e.getMessage());
-                return;
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드를 설정
+                res.getWriter().write("Authentication failed!"); // 오류 메시지를 응답 본문에 작성
+                return; // 필터 체인의 나머지 처리를 중단하고 응답을 반환
             }
         }
 
@@ -87,7 +89,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // 인증 처리
-    public void setAuthentication(String username) {
+    public void setAuthentication(String username) throws UsernameNotFoundException{
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
@@ -96,7 +98,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // 인증 객체 생성
-    private Authentication createAuthentication(String username) {
+    private Authentication createAuthentication(String username) throws UsernameNotFoundException {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);//admin2
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

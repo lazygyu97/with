@@ -17,7 +17,8 @@ repositories {
 
 dependencies {
     // Spring Web, security, thymleaf, mysql,jwt,validation...
-
+    // OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
@@ -32,7 +33,7 @@ dependencies {
     // MySQL
     implementation 'com.mysql:mysql-connector-j'
     // h2
-    implementation 'com.h2database:h2'
+    testImplementation 'com.h2database:h2'
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.4'
     // JPA

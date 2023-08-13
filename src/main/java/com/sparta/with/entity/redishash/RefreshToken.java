@@ -10,9 +10,8 @@ public class RefreshToken {
     private String refreshToken;
     private Long memberId;
 
-    public RefreshToken(final String refreshToken, final Long memberId) {
+    public RefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
-        this.memberId = memberId;
     }
 
     public String getRefreshToken() {

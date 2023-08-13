@@ -21,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
@@ -127,7 +129,6 @@ public class UserService {
         return userRepository.findAll().stream().map(UserResponseDto::of).toList();
     }
 
-    // 프로필 수정
     public UserResponseDto updateProfile(Long id, MultipartFile image) {
 
         User user = findUserByUserid(id);
