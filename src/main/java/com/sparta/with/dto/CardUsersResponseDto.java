@@ -12,14 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardUsersResponseDto extends ApiResponseDto {
-  private List<CardUserResponseDto> collaborators;
+    private List<CardUserResponseDto> collaborators;
 
-  public static CardUsersResponseDto of(List<CardUser> cardUsers) {
-    List<CardUserResponseDto> cardUserResponseDtos = cardUsers.stream().map(CardUserResponseDto::of)
+    public static CardUsersResponseDto of(List<CardUser> cardUsers) {
+        List<CardUserResponseDto> cardUserResponseDtos = cardUsers.stream().map(CardUserResponseDto::of)
         .toList();
-    return CardUsersResponseDto.builder()
-        .collaborators(cardUserResponseDtos)
-        .build();
-  }
-
+        return CardUsersResponseDto.builder()
+            .collaborators(cardUserResponseDtos)
+            .build();
+    }
 }

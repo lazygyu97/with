@@ -2,7 +2,7 @@ package com.sparta.with.controller;
 
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.EmailRequestDto;
-import com.sparta.with.dto.EmailVerificationRequestDto;
+import com.sparta.with.dto.EmailVerificationRequestDto
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.EmailService;
@@ -54,17 +54,17 @@ public class UserController {
         return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
 
-    @PostMapping("/login/mail")
+    @PostMapping("/signup/mail")
     public ResponseEntity mailSend(@RequestBody EmailRequestDto requestDto) throws Exception {
         return ResponseEntity.status(201).body(emailService.sendSimpleMessage(requestDto.getEmail()));
     }
 
-    @GetMapping("/login/mail")
+    @GetMapping("/signup/mail")
     public ResponseEntity mailVerification(@RequestBody EmailVerificationRequestDto requestDto){
         emailService.mailVerification(requestDto);
         return ResponseEntity.ok().body("이메일이 인증되었습니다.");
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout") // @Post 변경 예정
     public ResponseEntity logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
         userService.logout(userDetails.getUser(), request);
         return ResponseEntity.ok().body("로그아웃 완료");
@@ -80,12 +80,13 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
+
+    // 프로필 수정
     @PutMapping("/profile")
     public ResponseEntity updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
-        Long userId = userDetails.getUser().getId(); // 사용자 id
+        @RequestPart(name = "image") MultipartFile image) throws IOException {
 
-        userService.updateProfile(userId, image);
+        Long userId = userDetails.getUser().getId(); // 사용자 id
 
         return ResponseEntity.ok().body(userService.updateProfile(userId, image));
     }

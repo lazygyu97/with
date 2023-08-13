@@ -96,7 +96,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("로그인")
-    @Order(3)
+    @Order(4)
     public void login() throws Exception {
         LoginRequestDto loginRequestDto = LoginRequestDto
                 .builder()

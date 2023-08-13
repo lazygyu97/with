@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardUsersResponseDto {
-  private List<BoardUserResponseDto> collaborators;
+    private List<BoardUserResponseDto> collaborators;
 
-  public static BoardUsersResponseDto of(List<BoardUser> boardUsers) {
-    List<BoardUserResponseDto> boardUserResponseDtos = boardUsers.stream().map(BoardUserResponseDto::of)
-        .toList();
-    return BoardUsersResponseDto.builder()
-        .collaborators(boardUserResponseDtos)
-        .build();
-  }
+    public static BoardUsersResponseDto of(List<BoardUser> boardUsers) {
+        List<BoardUserResponseDto> boardUsersResponseDto = boardUsers.stream()
+            .map(BoardUserResponseDto::of)
+            .toList();
+        return BoardUsersResponseDto.builder()
+            .collaborators(boardUsersResponseDto)
+            .build();
+    }
 
 }

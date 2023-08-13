@@ -33,8 +33,7 @@ public class CommentService {
 
   // 댓글 수정
   @Transactional
-  public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
-    Comment comment = findComment(id);
+  public CommentResponseDto updateComment(Comment comment, CommentRequestDto requestDto, User user) {
 
     comment.updateContent(requestDto.getContent());
 
@@ -43,17 +42,8 @@ public class CommentService {
 
   @Transactional
   // 댓글 삭제
-  public void deleteComment(Long id, User user) {
-    Comment comment = findComment(id);
+  public void deleteComment(Comment comment, User user) {
 
     commentRepository.delete(comment);
-  }
-
-  // 해당 카드가 DB에 존재하는지 확인
-  private Comment findComment(Long id) {
-
-    return commentRepository.findById(id).orElseThrow(() ->
-        new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
-    );
   }
 }

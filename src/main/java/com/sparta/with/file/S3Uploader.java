@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor    // final 멤버변수가 있으면 생성자 항목에 포함시킴
@@ -35,7 +35,7 @@ public class S3Uploader {
     // MultipartFile 을 전달받아 File 전환한 후 S3에 업로드
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+            .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
         return upload(uploadFile, dirName);
     }
 
@@ -50,8 +50,8 @@ public class S3Uploader {
 
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(
-                new PutObjectRequest(bucketName, fileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)    // PublicRead 권한으로 업로드 됨
+            new PutObjectRequest(bucketName, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead)    // PublicRead 권한으로 업로드 됨
         );
         // getURl()을 통해 파일이 저장된 URL 을 return 해주고, 이 URL 로 이동 시 해당 파일이 오픈됨
         return amazonS3Client.getUrl(bucketName, fileName).toString();
@@ -90,7 +90,7 @@ public class S3Uploader {
 
 
     public String deleteFile(String fileName) {
-        amazonS3Client.deleteObject(bucketName, fileName);
+      amazonS3Client.deleteObject(bucketName, fileName);
         return fileName + " removed ...";
     }
 
