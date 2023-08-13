@@ -25,6 +25,7 @@ public class CardResponseDto extends ApiResponseDto {
     private String image;
     private List<CardUserResponseDto> cardUsers; // 협업자들
     private List<CommentResponseDto> comments;
+    private List<CheckListResponseDto> checkLists;
 
     public static CardResponseDto of(Card card) {
         return CardResponseDto.builder()
@@ -38,6 +39,9 @@ public class CardResponseDto extends ApiResponseDto {
                 .collect(Collectors.toList()))
             .comments(card.getComments().stream()
                 .map(CommentResponseDto::of)
+                .collect(Collectors.toList()))
+            .checkLists(card.getCheckLists().stream()
+                .map(CheckListResponseDto::of)
                 .collect(Collectors.toList()))
             .build();
     }
