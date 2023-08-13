@@ -11,8 +11,11 @@ import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.CardService;
 import com.sparta.with.service.UserService;
 import com.sun.jdi.request.DuplicateRequestException;
+import java.io.IOException;
 import java.util.concurrent.RejectedExecutionException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,8 +26,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -33,12 +40,18 @@ public class CardController {
     private final UserService userService;
     private final CardService cardService;
 
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
+
+
     // 전체 카드 목록 조회
     @GetMapping("/cards")
     public ResponseEntity<CardListResponseDto> getCards() {
         CardListResponseDto result = cardService.getCards();
 
         return ResponseEntity.ok().body(result);
+
     }
 
     // 카드 생성(제목만)
@@ -51,6 +64,7 @@ public class CardController {
 
         return ResponseEntity.status(201).body(result);
     }
+
 
     // 카드 상세 페이지 조회
     @GetMapping("/cards/{id}")
@@ -87,14 +101,16 @@ public class CardController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 카드 이미지 수정
-    @PutMapping("/cards/{id}/image")
+    // 카드 이미지 S3 이미지 업로드
+    @PutMapping("/cards/{id}/imageUpload")
     public ResponseEntity<CardResponseDto> updateImage(@PathVariable Long id,
-        @RequestBody CardRequestDto requestDto) {
+        @RequestPart(name = "image") MultipartFile image) throws IOException {
 
-        CardResponseDto result = cardService.updateImage(id, requestDto);
+        CardResponseDto result = cardService.updateImage(id, image);
         return ResponseEntity.ok().body(result);
     }
+
+    // 체크박스 추가
 
     // 카드에 협업자 목록 보여주기
     @GetMapping("/cards/{id}/collaborators")
@@ -105,7 +121,7 @@ public class CardController {
     }
 
     // 카드에 작업자 할당
-    @PostMapping("/cards/{id}/collaborators")
+    @PutMapping("/cards/{id}/collaborators")
     public ResponseEntity<ApiResponseDto> addCollaborator(@PathVariable Long id,
         @RequestBody CardUserRequestDto requestDto) {
         User collaborator = userService.findUserByUserid(requestDto.getUserId());
@@ -137,13 +153,13 @@ public class CardController {
             .body(new ApiResponseDto("카드에 협업자가 삭제되었습니다.", HttpStatus.ACCEPTED.value()));
     }
 
-
     // 카드 삭제
     @DeleteMapping("/cards/{id}")
     public ResponseEntity<ApiResponseDto> deletePost(@PathVariable Long id) {
         try {
             cardService.deleteCard(id);
-            return ResponseEntity.ok().body(new ApiResponseDto("카드 삭제 성공", HttpStatus.OK.value()));
+            return ResponseEntity.ok()
+                .body(new ApiResponseDto("카드 삭제 성공", HttpStatus.OK.value()));
         } catch (RejectedExecutionException e) {
             return ResponseEntity.badRequest().build();
         }
