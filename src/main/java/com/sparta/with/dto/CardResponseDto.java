@@ -26,19 +26,22 @@ public class CardResponseDto extends ApiResponseDto {
     private List<CardUserResponseDto> cardUsers; // 협업자들
     private List<CommentResponseDto> comments;
 
-    public static CardResponseDto of(Card card) {
-        return CardResponseDto.builder()
-            .id(card.getId())
-            .title(card.getTitle())
-            .content(card.getContent())
-            .startDate(card.getStartDate())
-            .dueDate(card.getDueDate())
-            .username(card.getAuthor().getUsername())
-            .cardUsers(card.getCardUsers().stream().map(CardUserResponseDto::of)
-                .collect(Collectors.toList()))
-            .comments(card.getComments().stream()
-                .map(CommentResponseDto::of)
-                .collect(Collectors.toList()))
-            .build();
-    }
+  public static CardResponseDto of(Card card) {
+    return CardResponseDto.builder()
+        .id(card.getId())
+        .title(card.getTitle())
+        .content(card.getContent())
+        .startDate(card.getStartDate())
+        .dueDate(card.getDueDate())
+        .username(card.getAuthor().getUsername())
+        .color(card.getColor())
+        .image(card.getImage())
+        .cardUsers(card.getCardUsers().stream().map(CardUserResponseDto::of)
+            .collect(Collectors.toList()))
+        .comments(card.getComments().stream()
+        .map(CommentResponseDto::of)
+        .collect(Collectors.toList()))
+        .build();
+  }
+
 }
