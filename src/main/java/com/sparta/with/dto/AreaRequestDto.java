@@ -13,8 +13,9 @@ public class AreaRequestDto {
 //    private Integer position;
 
     @Builder
-    public Area toEntity() {
+    public Area toEntity(Board board) {
         return Area.builder()
+            .board(board)
             .name(this.name)
 //            .author(author)
             .build();

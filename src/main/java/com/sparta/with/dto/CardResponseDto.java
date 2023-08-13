@@ -35,6 +35,8 @@ public class CardResponseDto extends ApiResponseDto {
             .startDate(card.getStartDate())
             .dueDate(card.getDueDate())
             .username(card.getAuthor().getUsername())
+            .color(card.getColor())
+            .image(card.getImage())
             .cardUsers(card.getCardUsers().stream().map(CardUserResponseDto::of)
                 .collect(Collectors.toList()))
             .comments(card.getComments().stream()

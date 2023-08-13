@@ -12,22 +12,25 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AreaResponseDto {
-  private String name;
-  private List<CardResponseDto> cards;
 
-  public AreaResponseDto(Area area) {
-    this.name = area.getName();
-    if (area.getCards() != null) {
-      this.cards = area.getCards().stream()
-              .map(CardResponseDto::of)
-              .collect(Collectors.toList());
+    private Long id;
+    private String name;
+    private List<CardResponseDto> cards;
+
+    public AreaResponseDto(Area area) {
+        this.name = area.getName();
+        if (area.getCards() != null) {
+            this.cards = area.getCards().stream()
+                .map(CardResponseDto::of)
+                .collect(Collectors.toList());
+        }
     }
-  }
 
-  public static AreaResponseDto of(Area area) {
-    return AreaResponseDto.builder()
+    public static AreaResponseDto of(Area area) {
+        return AreaResponseDto.builder()
+            .id(area.getId())
             .name(area.getName())
             .cards(area.getCards().stream().map(CardResponseDto::of).toList())
             .build();
-  }
+    }
 }
