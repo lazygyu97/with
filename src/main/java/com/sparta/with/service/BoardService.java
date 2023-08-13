@@ -141,16 +141,17 @@ public class BoardService {
     // 보드 협업자 등록
     // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
     @Transactional
-    public void addCollaborator(Long boardId, Long boardUserId, User author) {
+    public void addCollaborator(Long boardId,String username) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
-        User collaborator = userRepository.findById(boardUserId)
+        System.out.println("check"+username);
+        User collaborator = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
         try {
             if (boardUserRepository.existsByBoard_IdAndCollaborator_Id(boardId, collaborator.getId())) {
                 throw new IllegalArgumentException("칸반 보드에 이미 협업자로 등록된 사용자입니다.");
             }
-            if (collaborator.equals(author)) {
+            if (collaborator.getId().equals(board.getAuthor().getId())) {
                 throw new DuplicateRequestException("입력하신 아이디는 칸반 보드의 오너입니다.");
             }
 

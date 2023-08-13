@@ -24,7 +24,7 @@ public class AreaService {
                 () -> new IllegalArgumentException("해당 보드가 존재하지 않습니다.")
             );
 
-            Area area = areaRequestDto.toEntity();
+            Area area = areaRequestDto.toEntity(board);
             areaRepository.save(area);
 
             return AreaResponseDto.of(area);
