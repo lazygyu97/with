@@ -12,9 +12,7 @@ public class BoardRequestDto {
     @NotBlank
     private String name;
 
-    @NotBlank
     private String color;
-
     private String info;
 
     public Board toEntity(User author) {

@@ -63,7 +63,7 @@ public class BoardController {
 
     // 보드 이름 수정
     @Operation(summary = "update Board's Name", description = "칸반 보드 이름 수정")
-    @PutMapping("/boards/{id}/names")
+    @PutMapping("/boards/names/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardName(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long id,
@@ -77,7 +77,7 @@ public class BoardController {
 
     // 보드 배경색상 수정
     @Operation(summary = "update Board's Color", description = "칸반 보드 배경색상 수정")
-    @PutMapping("/boards/{id}/colors")
+    @PutMapping("/boards/colors/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardColor(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long id,
@@ -91,7 +91,7 @@ public class BoardController {
 
     // 보드 설명 수정
     @Operation(summary = "update Board's Info", description = "칸반 보드 설명 수정")
-    @PutMapping("/boards/{id}/infos")
+    @PutMapping("/boards/infos/{id}")
     public ResponseEntity<ApiResponseDto> updateBoardInfo(
         @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id,
         @RequestBody BoardRequestDto boardRequestDto) {
@@ -119,13 +119,13 @@ public class BoardController {
 
 
     // 보드 협업자 등록
-    // 허락받아야 초대 가능한 로직으로 변경하기 - 추후 작업
-    @PostMapping("/boards/{boardId}/collaborators")
-    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId, @RequestBody CollaboratorRequestDto requestDto) {
+    // 허락받아야 초대되는 로직으로 변경하기 - 추후 작업
+    @Operation(summary = "add Collaborators of Board", description = "칸반 보드에 협업자 등록")
+    @PostMapping("/boards/collaborators/{boardId}/{boardUserId}")
+    public ResponseEntity<ApiResponseDto> addCollaborator(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long boardId, @PathVariable Long boardUserId) {
 //        Board board = boardService.findBoard(userDetails.getUser(), boardId);
 //        User collaborator = userService.findUserByUserid(userDetails.getUser().getId());
-
-        boardService.addCollaborator(boardId, requestDto.getUsername(), userDetails.getUser());
+        boardService.addCollaborator(boardId, boardUserId, userDetails.getUser());
 
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드에 협업자가 등록되었습니다.", HttpStatus.OK.value()));
@@ -147,7 +147,8 @@ public class BoardController {
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 수정되었습니다.", HttpStatus.OK.value()));
     }
-    // 내 칸반 보드에 협업자 조회 (카드 내 Members - Board members 와 동일)
+
+    // 보드 협업자 조회 (카드 내 Members - Board members 와 동일)
     @GetMapping("/boards/get-collaborators/{boardId}")
     public ResponseEntity<BoardUsersResponseDto> getBoardUsers(@PathVariable Long boardId) {
         BoardUsersResponseDto boardUser = boardService.getBoardUsers(boardId);
@@ -157,16 +158,13 @@ public class BoardController {
 
     // 보드 협업자 삭제
     @Operation(summary = "update Collaborators of Board", description = "칸반 보드의 협업자 명단 수정")
-    @DeleteMapping("/boards/collaborators/{boardId}/{boardUserId}")
+    @DeleteMapping("/boards/collaborators/{boardId}/{userId}")
     public ResponseEntity<ApiResponseDto> deleteCollaborator(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long boardId,
-        @PathVariable Long boardUserId
+        @PathVariable Long userId
     ) {
-        Board board = boardService.findBoard(userDetails.getUser(), boardId);
-        BoardUser boardUser = boardService.findCollaborator(boardUserId);
-
-        boardService.deleteCollaborator(board, boardUser);
+        boardService.deleteCollaborator(boardId, userId);
         return ResponseEntity.ok()
             .body(new ApiResponseDto("칸반 보드의 협업자가 삭제되었습니다.", HttpStatus.OK.value()));
     }

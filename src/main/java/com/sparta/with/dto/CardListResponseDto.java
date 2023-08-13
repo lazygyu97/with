@@ -12,12 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardListResponseDto extends ApiResponseDto {
-  private List<CardResponseDto> cardsList;
 
-  public static CardListResponseDto of(List<Card> cards){
-    List<CardResponseDto> cardResponseDtos = cards.stream().map(CardResponseDto::of).toList();
-    return CardListResponseDto.builder()
-        .cardsList(cardResponseDtos)
-        .build();
-  }
+    private List<CardResponseDto> cardsList;
+
+    public static CardListResponseDto of(List<Card> cards) {
+        List<CardResponseDto> cardResponseDtos = cards.stream().map(CardResponseDto::of).toList();
+        return CardListResponseDto.builder()
+            .cardsList(cardResponseDtos)
+            .build();
+    }
 }

@@ -40,8 +40,10 @@ public class CardController {
     private final UserService userService;
     private final CardService cardService;
 
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
+
 
     // 전체 카드 목록 조회
     @GetMapping("/cards")
@@ -49,6 +51,7 @@ public class CardController {
         CardListResponseDto result = cardService.getCards();
 
         return ResponseEntity.ok().body(result);
+
     }
 
     // 카드 생성(제목만)
@@ -61,6 +64,7 @@ public class CardController {
 
         return ResponseEntity.status(201).body(result);
     }
+
 
     // 카드 상세 페이지 조회
     @GetMapping("/cards/{id}")

@@ -82,7 +82,4 @@ public class Card extends Timestamped {
   }
   public void updateColor(String color) {this.color = color;}
   public void updateImage(String image) {this.image = image;}
-
-
-
 }
