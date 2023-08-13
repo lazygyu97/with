@@ -37,4 +37,7 @@ public class CheckList {
     @Column
     private boolean isChecked = false;
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

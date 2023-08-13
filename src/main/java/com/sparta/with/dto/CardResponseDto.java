@@ -25,23 +25,24 @@ public class CardResponseDto extends ApiResponseDto {
     private String image;
     private List<CardUserResponseDto> cardUsers; // 협업자들
     private List<CommentResponseDto> comments;
+    private List<CheckListResponseDto> checkLists;
 
-  public static CardResponseDto of(Card card) {
-    return CardResponseDto.builder()
-        .id(card.getId())
-        .title(card.getTitle())
-        .content(card.getContent())
-        .startDate(card.getStartDate())
-        .dueDate(card.getDueDate())
-        .username(card.getAuthor().getUsername())
-        .color(card.getColor())
-        .image(card.getImage())
-        .cardUsers(card.getCardUsers().stream().map(CardUserResponseDto::of)
-            .collect(Collectors.toList()))
-        .comments(card.getComments().stream()
-        .map(CommentResponseDto::of)
-        .collect(Collectors.toList()))
-        .build();
-  }
-
+    public static CardResponseDto of(Card card) {
+        return CardResponseDto.builder()
+            .id(card.getId())
+            .title(card.getTitle())
+            .content(card.getContent())
+            .startDate(card.getStartDate())
+            .dueDate(card.getDueDate())
+            .username(card.getAuthor().getUsername())
+            .cardUsers(card.getCardUsers().stream().map(CardUserResponseDto::of)
+                .collect(Collectors.toList()))
+            .comments(card.getComments().stream()
+                .map(CommentResponseDto::of)
+                .collect(Collectors.toList()))
+            .checkLists(card.getCheckLists().stream()
+                .map(CheckListResponseDto::of)
+                .collect(Collectors.toList()))
+            .build();
+    }
 }
