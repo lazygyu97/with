@@ -2,7 +2,6 @@ package com.sparta.with.controller;
 
 import com.sparta.with.dto.ApiResponseDto;
 import com.sparta.with.dto.EmailRequestDto;
-import com.sparta.with.dto.EmailVerificationRequestDto
 import com.sparta.with.dto.SignupRequestDto;
 import com.sparta.with.security.UserDetailsImpl;
 import com.sparta.with.service.EmailService;
@@ -60,8 +59,8 @@ public class UserController {
     }
 
     @GetMapping("/signup/mail")
-    public ResponseEntity mailVerification(@RequestBody EmailVerificationRequestDto requestDto){
-        emailService.mailVerification(requestDto);
+    public ResponseEntity mailVerification(@RequestParam String email,@RequestParam String code){
+        emailService.mailVerification(email,code);
         return ResponseEntity.ok().body("이메일이 인증되었습니다.");
     }
     @GetMapping("/logout") // @Post 변경 예정

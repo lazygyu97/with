@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardUserResponseDto extends ApiResponseDto {
+    private Long id;
    private String collaborator;
 
     public static CardUserResponseDto of(CardUser cardUser) {
         return CardUserResponseDto.builder()
+            .id(cardUser.getCollaborator().getId())
             .collaborator(cardUser.getCollaborator().getUsername())
             .build();
     }

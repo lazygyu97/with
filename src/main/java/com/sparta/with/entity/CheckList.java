@@ -40,4 +40,13 @@ public class CheckList {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void unCheck(){
+        this.isChecked=false;
+    }
+    public void check(){
+        this.isChecked=true;
+    }
+
+
 }

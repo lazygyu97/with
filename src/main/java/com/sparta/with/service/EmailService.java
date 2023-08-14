@@ -94,9 +94,8 @@ public class EmailService {
         return ePw;
     }
 
-    public void mailVerification(EmailVerificationRequestDto requestDto) {
-        String email = requestDto.getEmail();
-        String code = requestDto.getCode();
+    public void mailVerification(String email, String code) {
+
         EmailVerification emailVerification = emailVerificationRepository.findById(email)
                 .orElseThrow(() -> new IllegalArgumentException("인증코드를 발송해주세요."));
 
