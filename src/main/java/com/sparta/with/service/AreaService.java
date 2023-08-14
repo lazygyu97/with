@@ -8,6 +8,7 @@ import com.sparta.with.repository.AreaRepository;
 import com.sparta.with.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class AreaService {
     }
 
     // 컬럼 이름 수정
+    @Transactional
     public Area updateAreaName(Area area, AreaRequestDto areaRequestDto) {
         try {
             area.updateName(areaRequestDto);

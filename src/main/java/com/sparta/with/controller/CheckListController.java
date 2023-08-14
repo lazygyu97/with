@@ -32,13 +32,20 @@ public class CheckListController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+//    // 체크리스트 수정
+//    // 카드 내용 수정
+//    @PutMapping("/checklists/{id}")
+//    public ResponseEntity<CheckListResponseDto> updateContent(@PathVariable Long id,
+//        @RequestBody CheckListRequestDto requestDto) {
+//        CheckListResponseDto result = checkListService.updateCheckList(id, requestDto);
+//
+//        return ResponseEntity.ok().body(result);
+//    }
     // 체크리스트 수정
     // 카드 내용 수정
     @PutMapping("/checklists/{id}")
-    public ResponseEntity<CheckListResponseDto> updateContent(@PathVariable Long id,
-        @RequestBody CheckListRequestDto requestDto) {
-        CheckListResponseDto result = checkListService.updateCheckList(id, requestDto);
-
+    public ResponseEntity<CheckListResponseDto> checkContent(@PathVariable Long id) {
+        CheckListResponseDto result = checkListService.checkContent(id);
         return ResponseEntity.ok().body(result);
     }
 

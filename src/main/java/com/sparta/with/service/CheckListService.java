@@ -47,7 +47,16 @@ public class CheckListService {
 
         checkListRepository.delete(checkList);
     }
-
+    @Transactional
+    public CheckListResponseDto checkContent(Long id) {
+        CheckList checkList = findCheckList(id);
+        if(checkList.isChecked()){
+            checkList.unCheck();
+        }else {
+            checkList.check();
+        }
+        return CheckListResponseDto.of(checkList);
+    }
     // 해당 체크리스트가 DB에 존재하는지 확인
     private CheckList findCheckList(Long id) {
 
